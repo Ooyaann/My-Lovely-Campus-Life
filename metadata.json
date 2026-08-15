@@ -1,0 +1,6 @@
+{
+  "name": "My Lovely Campus Life",
+  "description": "Workspace Pendamping Kuliah & Digital Sanctuary Pendidikan Kimia UPI karya Mas untuk Sayang tercinta.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
