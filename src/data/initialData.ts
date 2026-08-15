@@ -530,121 +530,19 @@ export const INITIAL_ROMANTIC_AFFIRMATIONS: RomanticAffirmation[] = [
   }
 ];
 
-export const INITIAL_ASSIGNMENTS: AssignmentTask[] = [
-  {
-    id: "task-1",
-    title: "Laptrak Kimia Dasar 1: Titrasi Asam Basa & Kadar Cuka",
-    typeId: "type-laptrak",
-    categoryName: "Laptrak & Jurnal Lab",
-    course: "KIMIA DASAR 1",
-    deadline: "Besok, 23:59",
-    priority: "Tinggi",
-    isDone: false,
-    notes: "Lengkapi data pengamatan titrasi indikator PP dan perhitungan konsentrasi NaOH.",
-    subtasks: [
-      { id: "sub-1", title: "Tuliskan Bab Dasar Teori & Persamaan Stoikiometri", isDone: true },
-      { id: "sub-2", title: "Hitung rata-rata volume titran duplo", isDone: false },
-      { id: "sub-3", title: "Selesaikan Pembahasan & Sumber Kesalahan", isDone: false }
-    ],
-    createdAt: "2026-08-14"
-  },
-  {
-    id: "task-2",
-    title: "Makalah Strategi Pembelajaran Kimia Berbasis PjBL",
-    typeId: "type-kuliah",
-    categoryName: "Tugas Kuliah & Makalah",
-    course: "STRATEGI PEMBELAJARAN",
-    deadline: "Jumat, 10:00",
-    priority: "Sedang",
-    isDone: false,
-    notes: "Fokus pada sintaks Project-Based Learning untuk topik Ikatan Kimia SMA.",
-    subtasks: [
-      { id: "sub-4", title: "Cari 3 referensi jurnal SINTA / Scopus", isDone: true },
-      { id: "sub-5", title: "Buat sintaks modul ajar diferensiasi", isDone: false }
-    ],
-    createdAt: "2026-08-13"
-  },
-  {
-    id: "task-3",
-    title: "Latihan Soal Matematika Kimia: Persamaan Termodinamika",
-    typeId: "type-kuliah",
-    categoryName: "Tugas Kuliah & Makalah",
-    course: "MATEMATIKA UNTUK KIMIA",
-    deadline: "Selasa Depan, 07:00",
-    priority: "Sedang",
-    isDone: false,
-    notes: "Kerjakan Bab 3 halaman 45-48 di buku kerja.",
-    createdAt: "2026-08-12"
-  },
-  {
-    id: "task-4",
-    title: "Ambil Laundry Kos & Beli Vitamin",
-    typeId: "type-pribadi",
-    categoryName: "Pengingat Pribadi & Kos",
-    deadline: "Hari Ini, 18:00",
-    priority: "Santai",
-    isDone: true,
-    notes: "Jangan lupa ambil nota laundry di dompet.",
-    createdAt: "2026-08-15"
-  },
-  {
-    id: "task-5",
-    title: "Makan Mie Ayam Bareng Mas Sepulang Kuliah",
-    typeId: "type-kencan",
-    categoryName: "Kencan & Janji Berdua",
-    deadline: "Kamis Sore, 16:30",
-    priority: "Tinggi",
-    isDone: false,
-    notes: "Mas yang jemput di lobi Gedung JICA FPMIPA UPI.",
-    createdAt: "2026-08-15"
-  }
-];
+export const INITIAL_ASSIGNMENTS: AssignmentTask[] = [];
 
-export const INITIAL_EXPENSES: ExpenseItem[] = [
-  {
-    id: "exp-1",
-    title: "Makan Siang (Kantin FPMIPA UPI)",
-    amount: 15000,
-    category: "Makan",
-    date: "2026-08-15",
-    time: "12:30",
-    notes: "Nasi, ayam suwir, kangkung, es teh"
-  },
-  {
-    id: "exp-2",
-    title: "Kopi Susu Penyemangat Lab",
-    amount: 18000,
-    category: "Kopi/Nongkrong",
-    date: "2026-08-15",
-    time: "15:15",
-    notes: "Biar gak ngantuk ngetik laptrak"
-  },
-  {
-    id: "exp-3",
-    title: "Print Laptrak & Kertas Milimeter Blok",
-    amount: 12000,
-    category: "Alat Lab/Print",
-    date: "2026-08-15",
-    time: "08:00",
-    notes: "Print warna cover & kertas grafik"
-  }
-];
+export const INITIAL_EXPENSES: ExpenseItem[] = [];
 
 export const INITIAL_HABITS: DailyHabit[] = [
-  { id: "h1", label: "Minum Air Putih 2 Liter", category: "Kesehatan", iconName: "Droplets", isDone: true },
-  { id: "h2", label: "Review Catatan Kuliah 15 Menit", category: "Pikiran", iconName: "BookOpen", isDone: true },
+  { id: "h1", label: "Minum Air Putih 2 Liter", category: "Kesehatan", iconName: "Droplets", isDone: false },
+  { id: "h2", label: "Review Catatan Kuliah 15 Menit", category: "Pikiran", iconName: "BookOpen", isDone: false },
   { id: "h3", label: "Tidur Sebelum Jam 23:00", category: "Istirahat", iconName: "Moon", isDone: false },
-  { id: "h4", label: "Catat Pengeluaran Kos Hari Ini", category: "Keuangan", iconName: "Wallet", isDone: true },
-  { id: "h5", label: "Ngobrol Santai sama Mas / Teman Kos", category: "Sosial", iconName: "Heart", isDone: true }
+  { id: "h4", label: "Catat Pengeluaran Kos Hari Ini", category: "Keuangan", iconName: "Wallet", isDone: false },
+  { id: "h5", label: "Ngobrol Santai sama Mas / Teman Kos", category: "Sosial", iconName: "Heart", isDone: false }
 ];
 
-export const INITIAL_GOALS: GoalItem[] = [
-  { id: "g1", title: "Makan mie ayam bareng Mas sepulang praktikum titrasi", isDone: false, category: "Kuliner" },
-  { id: "g2", title: "Jalan-jalan sore di Taman Isola UPI", isDone: false, category: "Kencan" },
-  { id: "g3", title: "Mabar santai sampai menang bareng Mas", isDone: true, category: "Kencan" },
-  { id: "g4", title: "Raih IPK 3.80+ Semester 1 Pendidikan Kimia UPI", isDone: false, category: "Kuliah Bareng" },
-  { id: "g5", title: "Wisuda bareng dengan predikat Cumlaude!", isDone: false, category: "Mimpi Bersama" }
-];
+export const INITIAL_GOALS: GoalItem[] = [];
 
 export const CAMPUS_PORTAL_LINKS: CampusPortalLink[] = [
   {
@@ -1166,35 +1064,7 @@ export const INITIAL_LAPTRAK_TEMPLATES: import('../types').LaptrakTemplate[] = [
   }
 ];
 
-export const INITIAL_WELLNESS_LOGS: import('../types').WellnessLogItem[] = [
-  {
-    id: "well-1",
-    date: "2026-08-15",
-    time: "07:30",
-    category: "Vitamin & Obat",
-    title: "Minum Vitamin C & B-Complex",
-    notes: "Penting sebelum masuk lab kimia FPMIPA agar daya tahan tubuh selalu fit!",
-    status: "Selesai"
-  },
-  {
-    id: "well-2",
-    date: "2026-08-15",
-    time: "14:00",
-    category: "Fisik & Energi",
-    title: "Stretching Leher & Punggung",
-    notes: "Lakukan peregangan 5 menit setelah mengetik data percobaan di laptop.",
-    status: "Selesai"
-  },
-  {
-    id: "well-3",
-    date: "2026-08-15",
-    time: "19:00",
-    category: "Catatan Mas",
-    title: "Pesan Mas: Istirahat Cukup & Jangan Begadang",
-    notes: "Kalau laptrak udah beres dicicil, tidur sebelum jam 23:00 ya Sayang ❤️",
-    status: "Baik"
-  }
-];
+export const INITIAL_WELLNESS_LOGS: import('../types').WellnessLogItem[] = [];
 
 export const INITIAL_LOVE_NOTES: LoveNoteEntry[] = [
   {
