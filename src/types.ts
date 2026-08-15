@@ -130,10 +130,21 @@ export interface WeeklyQuestion {
 
 export interface TeachingIdea {
   id: string;
+  title: string;
   topic: string;
-  analogyOrIdea: string;
-  gradeLevel: string;
-  createdAt: string;
+  level: string;
+  description: string;
+  materials: string;
+  isCustom?: boolean;
+}
+
+export interface UPISurvivalNote {
+  id: string;
+  title: string;
+  category: string;
+  content: string;
+  location?: string;
+  isCustom?: boolean;
 }
 
 export interface RomanticAffirmation {
@@ -147,9 +158,10 @@ export interface RomanticAffirmation {
 export interface AIPromptTemplate {
   id: string;
   title: string;
-  category: 'Pendidikan Kimia' | 'Laptrak & Lab' | 'Pedagogi & RPP' | 'Studi Literatur';
+  category: string;
   description: string;
   promptText: string;
+  isCustom?: boolean;
 }
 
 export interface ReflectionEntry {

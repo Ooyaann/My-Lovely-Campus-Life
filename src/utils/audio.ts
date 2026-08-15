@@ -1,9 +1,12 @@
 // Procedural ambient sound synthesis using Web Audio API
 
+export type AmbientSoundType = 'rain' | 'alpha' | 'stream';
+
 let audioCtx: AudioContext | null = null;
 let ambientGain: GainNode | null = null;
 let ambientSources: (AudioNode | AudioBufferSourceNode | OscillatorNode)[] = [];
 let isPlayingAmbient = false;
+let currentSoundType: AmbientSoundType = 'rain';
 
 function getAudioContext(): AudioContext {
   if (!audioCtx) {
@@ -69,36 +72,100 @@ export function playGentlePop(): void {
   }
 }
 
-export function toggleLofiRainAmbient(enable: boolean, volume = 0.2): boolean {
+export function setAmbientVolume(volume: number): void {
+  if (ambientGain && audioCtx) {
+    try {
+      const clamped = Math.max(0, Math.min(1, volume));
+      ambientGain.gain.linearRampToValueAtTime(clamped, audioCtx.currentTime + 0.1);
+    } catch {
+      // ignore
+    }
+  }
+}
+
+function stopCurrentAmbient(): void {
+  if (ambientGain && audioCtx) {
+    try {
+      ambientGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+    } catch {
+      // ignore
+    }
+  }
+  setTimeout(() => {
+    ambientSources.forEach(src => {
+      try {
+        if ('stop' in src && typeof src.stop === 'function') {
+          src.stop();
+        }
+        src.disconnect();
+      } catch {
+        // ignore
+      }
+    });
+    ambientSources = [];
+    isPlayingAmbient = false;
+  }, 400);
+}
+
+export function toggleLofiRainAmbient(enable: boolean, volume = 0.25, soundType: AmbientSoundType = 'rain'): boolean {
   try {
     const ctx = getAudioContext();
 
     if (!enable) {
-      if (ambientGain) {
-        ambientGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
-      }
-      setTimeout(() => {
-        ambientSources.forEach(src => {
-          try {
-            if ('stop' in src && typeof src.stop === 'function') {
-              src.stop();
-            }
-            src.disconnect();
-          } catch {
-            // ignore
-          }
-        });
-        ambientSources = [];
-        isPlayingAmbient = false;
-      }, 600);
+      stopCurrentAmbient();
       return false;
     }
 
-    if (isPlayingAmbient) {
+    if (isPlayingAmbient && currentSoundType === soundType) {
+      setAmbientVolume(volume);
       return true;
     }
 
-    // Create pink noise for gentle rain ambient
+    // Stop previous if changing sound type
+    if (isPlayingAmbient) {
+      stopCurrentAmbient();
+    }
+
+    currentSoundType = soundType;
+
+    if (soundType === 'alpha') {
+      // Binaural alpha waves + warm drone (432Hz ambient chord)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const osc3 = ctx.createOscillator();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(216, ctx.currentTime); // A3 base (432Hz subharmonic)
+
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(226, ctx.currentTime); // 10Hz Alpha beat (226 - 216)
+
+      osc3.type = 'triangle';
+      osc3.frequency.setValueAtTime(144, ctx.currentTime); // Sub-bass warm pad
+
+      const subGain = ctx.createGain();
+      subGain.gain.setValueAtTime(0.05, ctx.currentTime);
+
+      ambientGain = ctx.createGain();
+      ambientGain.gain.setValueAtTime(0.001, ctx.currentTime);
+      ambientGain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 1.2);
+
+      osc1.connect(subGain);
+      osc2.connect(subGain);
+      osc3.connect(subGain);
+      subGain.connect(ambientGain);
+      ambientGain.connect(ctx.destination);
+
+      osc1.start();
+      osc2.start();
+      osc3.start();
+
+      ambientSources = [osc1, osc2, osc3, subGain, ambientGain];
+      isPlayingAmbient = true;
+      return true;
+    }
+
+    // Create pink noise for gentle rain or stream
     const bufferSize = ctx.sampleRate * 2;
     const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const output = noiseBuffer.getChannelData(0);
@@ -121,10 +188,10 @@ export function toggleLofiRainAmbient(enable: boolean, volume = 0.2): boolean {
     whiteNoise.buffer = noiseBuffer;
     whiteNoise.loop = true;
 
-    // Filter to make it sound like gentle outdoor rain
+    // Filter frequency according to sound type
     const filter = ctx.createBiquadFilter();
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(850, ctx.currentTime);
+    filter.frequency.setValueAtTime(soundType === 'stream' ? 1400 : 750, ctx.currentTime);
 
     // Warm chord drone in F major (gentle study background)
     const osc1 = ctx.createOscillator();
@@ -136,14 +203,14 @@ export function toggleLofiRainAmbient(enable: boolean, volume = 0.2): boolean {
     osc2.frequency.setValueAtTime(261.63, ctx.currentTime); // C4
 
     const droneGain = ctx.createGain();
-    droneGain.gain.setValueAtTime(0.03, ctx.currentTime);
+    droneGain.gain.setValueAtTime(0.025, ctx.currentTime);
 
     osc1.connect(droneGain);
     osc2.connect(droneGain);
 
     ambientGain = ctx.createGain();
     ambientGain.gain.setValueAtTime(0.001, ctx.currentTime);
-    ambientGain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 1.5);
+    ambientGain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 1.2);
 
     whiteNoise.connect(filter);
     filter.connect(ambientGain);

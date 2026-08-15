@@ -32,6 +32,7 @@ import {
   DEFAULT_MAS_PHONE
 } from '../data/initialData';
 import { playChimeSuccess, playGentlePop, toggleLofiRainAmbient } from '../utils/audio';
+import { sendLocalNotification } from '../utils/notifications';
 import confetti from 'canvas-confetti';
 
 interface AppContextType {
@@ -131,6 +132,8 @@ interface AppContextType {
   isPomodoroRunning: boolean;
   pomodoroMode: 'work' | 'break';
   isAmbientActive: boolean;
+  setPomodoroTime: React.Dispatch<React.SetStateAction<number>>;
+  setPomodoroMode: React.Dispatch<React.SetStateAction<'work' | 'break'>>;
   startPomodoro: () => void;
   pausePomodoro: () => void;
   resetPomodoro: (minutes?: number) => void;
@@ -339,10 +342,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
       if (pomodoroMode === 'work') {
         showToast('Sesi belajar selesai! Waktunya istirahat 5 menit ya Sayang ❤️');
+        sendLocalNotification('🎉 Sesi Belajar Selesai!', {
+          body: 'Hebat banget Sayang! Waktunya istirahat manis 5 menit & minum air ya ❤️'
+        });
         setPomodoroMode('break');
         setPomodoroTime(5 * 60);
       } else {
         showToast('Waktu istirahat selesai! Semangat kembali, Bu Guru Kimia ✨');
+        sendLocalNotification('✨ Waktu Istirahat Selesai!', {
+          body: 'Yuk mulai sesi fokus lagi, calon sarjana pendidikan kimia hebat UPI! Mas dukung selalu🤍'
+        });
         setPomodoroMode('work');
         setPomodoroTime(25 * 60);
       }
@@ -862,6 +871,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         isPomodoroRunning,
         pomodoroMode,
         isAmbientActive,
+        setPomodoroTime,
+        setPomodoroMode,
         startPomodoro,
         pausePomodoro,
         resetPomodoro,

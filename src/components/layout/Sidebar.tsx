@@ -189,17 +189,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenBackup }) => {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={onOpenBackup}
-              className="flex-1 py-2 px-3 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-[#9f1239] text-xs font-semibold transition-all cursor-pointer text-center flex items-center justify-center gap-1.5"
+              id="sidebar-backup-data-btn"
+              onClick={() => {
+                setIsSidebarOpen(false);
+                onOpenBackup();
+              }}
+              className="flex-1 py-2 px-3 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold transition-all cursor-pointer text-center flex items-center justify-center gap-1.5 shadow-2xs active:scale-98"
             >
-              <Download className="w-3.5 h-3.5 text-[#9f1239]" />
+              <Download className="w-3.5 h-3.5 text-rose-900" />
               <span>Cadangkan Data</span>
             </button>
             <a
               href="https://spot.upi.edu"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-slate-600 hover:text-[#9f1239] transition-all cursor-pointer"
+              className="p-2 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-slate-600 hover:text-rose-900 transition-all cursor-pointer"
               title="Buka SPOT UPI"
             >
               <ExternalLink className="w-4 h-4" />

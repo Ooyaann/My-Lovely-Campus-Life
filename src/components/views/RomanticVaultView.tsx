@@ -21,7 +21,8 @@ import {
   Flame,
   Search,
   Star,
-  RefreshCw
+  RefreshCw,
+  Send
 } from 'lucide-react';
 import { 
   SEVEN_SEALED_LETTERS, 
@@ -59,7 +60,6 @@ export const RomanticVaultView: React.FC = () => {
   
   // Interactive Message Bank states
   const [searchMsg, setSearchMsg] = useState('');
-  const [randomMsgIndex, setRandomMsgIndex] = useState(0);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Connection ritual state
@@ -102,13 +102,26 @@ export const RomanticVaultView: React.FC = () => {
     showToast('Topik obrolan baru dipilih!');
   };
 
+  // ESC listener for closing all modals
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedLetter(null);
+        setSelectedMilestone(null);
+        setShowBirthdayLetter(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const filteredMessages = DAILY_SUPPORT_MESSAGES.filter((msg) =>
     msg.toLowerCase().includes(searchMsg.toLowerCase())
   );
 
   return (
     <div className="space-y-6 sm:space-y-7 animate-fade-in pb-12">
-      {/* 1. Grand 16 August Birthday Hero Banner with Bright Maroon Gradient */}
+      {/* 1. Grand 16 August Birthday Hero Banner */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-950 via-rose-900 to-rose-950 text-white p-6 sm:p-9 shadow-sm border border-rose-300/20">
         <div className="relative z-10 max-w-2xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 text-rose-100 text-xs font-semibold backdrop-blur-xs border border-white/20 whitespace-nowrap">
@@ -121,7 +134,7 @@ export const RomanticVaultView: React.FC = () => {
           </h2>
 
           <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed font-sans line-clamp-2">
-            Surat panjang penuh ketulusan untuk merayakan hadirnya sosok paling berarti di dunia ini.
+            Surat panjang penuh ketulusan untuk merayakan hadirnya sosok paling berarti di dunia ini. Mas tulis dengan segenap cinta untukmu.
           </p>
 
           <div className="pt-2">
@@ -148,10 +161,10 @@ export const RomanticVaultView: React.FC = () => {
         <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-rose-400/20 rounded-full blur-2xl pointer-events-none" />
       </section>
 
-      {/* 2. Sub-Navigation: Filter Dropdown on Mobile + Responsive Grid on Desktop */}
+      {/* 2. Sub-Navigation: Custom Dropdown on Mobile + Responsive Button Grid on Desktop */}
       <div className="space-y-2">
-        {/* Mobile Custom Dropdown View */}
-        <div className="sm:hidden bg-white p-3 rounded-3xl border border-rose-200/90 shadow-xs space-y-1.5">
+        {/* Mobile Custom Dropdown */}
+        <div className="sm:hidden bg-white p-3.5 rounded-3xl border border-rose-200/90 shadow-2xs space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-wider text-rose-900 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-rose-900" />
             <span>Pilih Kategori Surat & Pesan:</span>
@@ -172,7 +185,7 @@ export const RomanticVaultView: React.FC = () => {
           />
         </div>
 
-        {/* Desktop / Tablet Grid View (Non-scrolling, wraps neatly) */}
+        {/* Desktop / Tablet Grid View */}
         <div className="hidden sm:grid sm:grid-cols-4 lg:grid-cols-7 gap-2">
           {[
             { id: 'letters', label: '7 Surat Tersegel', count: '7', icon: Mail },
@@ -208,7 +221,7 @@ export const RomanticVaultView: React.FC = () => {
       {/* TAB 1: 7 Open When Letters */}
       {activeTab === 'letters' && (
         <section className="space-y-4">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <div className="min-w-0">
               <h3 className="font-display font-bold text-lg sm:text-xl text-slate-900 truncate">
                 7 Surat Tersegel ("Buka Saat...")
@@ -217,7 +230,7 @@ export const RomanticVaultView: React.FC = () => {
                 Amplop khusus dari Mas untuk menemani setiap suasana hatimu
               </p>
             </div>
-            <span className="text-xs font-semibold text-rose-900 bg-rose-50 px-3 py-1 rounded-full border border-rose-200 whitespace-nowrap flex-shrink-0">
+            <span className="text-xs font-semibold text-rose-900 bg-rose-50 px-3 py-1 rounded-full border border-rose-200 whitespace-nowrap self-start sm:self-auto">
               {letters.filter((l) => l.isOpen).length} dari 7 Terbuka
             </span>
           </div>
@@ -227,10 +240,10 @@ export const RomanticVaultView: React.FC = () => {
               <div
                 key={letter.id}
                 onClick={() => handleOpenSealed(letter)}
-                className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
+                className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden shadow-2xs ${
                   letter.isOpen
-                    ? 'bg-white border-rose-200 hover:border-rose-300 shadow-xs'
-                    : 'bg-gradient-to-br from-rose-50/70 via-white to-pink-50/50 border-rose-200 hover:border-rose-900 hover:shadow-xs'
+                    ? 'bg-white border-rose-200 hover:border-rose-300'
+                    : 'bg-gradient-to-br from-rose-50/80 via-white to-pink-50/60 border-rose-200 hover:border-rose-900'
                 }`}
               >
                 <div className="space-y-2.5">
@@ -247,18 +260,18 @@ export const RomanticVaultView: React.FC = () => {
                     </div>
                   </div>
 
-                  <h4 className="font-display font-bold text-sm text-slate-900 group-hover:text-rose-900 transition-colors leading-snug truncate">
+                  <h4 className="font-display font-bold text-sm sm:text-base text-slate-900 group-hover:text-rose-900 transition-colors leading-snug">
                     {letter.title}
                   </h4>
 
-                  <p className="text-xs text-slate-500 italic line-clamp-2 leading-relaxed">
-                    {letter.isOpen ? letter.content : 'Amplop masih tersegel rapi dengan cap lilin merah...'}
+                  <p className="font-reading text-xs text-slate-600 italic line-clamp-2 leading-relaxed">
+                    {letter.isOpen ? letter.content : 'Amplop masih tersegel rapi dengan cap lilin merah dari Mas...'}
                   </p>
                 </div>
 
                 <div className="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold whitespace-nowrap">
                   <span className={letter.isOpen ? 'text-emerald-700' : 'text-rose-900'}>
-                    {letter.isOpen ? 'Sudah Dibuka' : 'Klik untuk Buka'}
+                    {letter.isOpen ? 'Sudah Dibuka' : 'Klik untuk Buka Amplop'}
                   </span>
                   <span className="text-slate-400 group-hover:text-rose-900 transition-transform group-hover:translate-x-1">
                     &rarr;
@@ -273,18 +286,18 @@ export const RomanticVaultView: React.FC = () => {
       {/* TAB: Afirmasi Harian Romantis */}
       {activeTab === 'affirmations' && (
         <section className="space-y-4">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <div>
               <h3 className="font-display font-bold text-lg sm:text-xl text-slate-900">
                 Afirmasi Harian Romantis
               </h3>
               <p className="text-xs text-slate-500">
-                Koleksi afirmasi positif cinta, kedewasaan, dan keyakinan hubungan
+                Koleksi afirmasi positif cinta, kedewasaan, dan keyakinan hubungan berdua
               </p>
             </div>
             <button
               onClick={nextAffirmation}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-900 text-white text-xs font-bold hover:bg-rose-800 transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-900 text-white text-xs font-bold hover:bg-rose-800 transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto shadow-2xs"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>Acak Afirmasi</span>
@@ -295,7 +308,7 @@ export const RomanticVaultView: React.FC = () => {
             {affirmations.map((aff) => (
               <div
                 key={aff.id}
-                className="p-5 rounded-2xl bg-white border border-rose-100 hover:border-rose-300 shadow-xs flex flex-col justify-between transition-all space-y-3"
+                className="p-5 rounded-2xl bg-white border border-rose-100 hover:border-rose-300 shadow-2xs flex flex-col justify-between transition-all space-y-3"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -304,12 +317,12 @@ export const RomanticVaultView: React.FC = () => {
                     </span>
                     <button
                       onClick={() => toggleFavoriteAffirmation(aff.id)}
-                      className="text-slate-400 hover:text-rose-900 cursor-pointer"
+                      className="text-slate-400 hover:text-rose-900 cursor-pointer p-1"
                     >
                       <Star className={`w-4 h-4 ${aff.isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
                     </button>
                   </div>
-                  <p className="font-display font-semibold text-xs sm:text-sm text-slate-800 leading-relaxed italic">
+                  <p className="font-reading text-xs sm:text-sm text-slate-800 leading-relaxed italic">
                     "{aff.text}"
                   </p>
                 </div>
@@ -358,24 +371,24 @@ export const RomanticVaultView: React.FC = () => {
                 <div
                   key={m.id}
                   onClick={() => handleOpenMilestone(m)}
-                  className="p-5 rounded-2xl bg-white border border-rose-200 hover:border-rose-900 shadow-xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between"
+                  className="p-5 sm:p-6 rounded-3xl bg-white border border-rose-200/90 hover:border-rose-900 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between"
                 >
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-rose-900 bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-200 whitespace-nowrap">
                         {m.scenario}
                       </span>
                       <Gift className="w-4 h-4 text-rose-500 flex-shrink-0" />
                     </div>
-                    <h4 className="font-display font-bold text-base text-slate-900 mt-2 truncate">
+                    <h4 className="font-display font-bold text-base sm:text-lg text-slate-900 mt-2">
                       {m.title}
                     </h4>
-                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                      {isOpened ? m.content : 'Surat rahasia untuk masa depan berdua... Klik untuk membuka.'}
+                    <p className="font-reading text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed">
+                      {isOpened ? m.content : 'Surat rahasia untuk masa depan berdua... Klik untuk membuka amplop.'}
                     </p>
                   </div>
                   <div className="mt-4 pt-2.5 border-t border-rose-100 flex items-center justify-between text-xs font-bold text-rose-900 whitespace-nowrap">
-                    <span>{isOpened ? 'Baca Ulang' : 'Buka Surat Milestone'}</span>
+                    <span>{isOpened ? 'Baca Ulang Surat' : 'Buka Surat Milestone'}</span>
                     <span>&rarr;</span>
                   </div>
                 </div>
@@ -401,13 +414,13 @@ export const RomanticVaultView: React.FC = () => {
             {REASONS_TO_TRUST.map((reason, idx) => (
               <div
                 key={idx}
-                className="p-4 sm:p-5 rounded-2xl bg-white border border-rose-100/90 hover:border-rose-300 shadow-xs transition-all flex gap-3.5 items-start"
+                className="p-4 sm:p-5 rounded-2xl bg-white border border-rose-100/90 hover:border-rose-300 shadow-2xs transition-all flex gap-3.5 items-start"
               >
                 <div className="w-7 h-7 rounded-full bg-rose-100 text-rose-900 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
                   {idx + 1}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+                  <p className="font-reading text-xs sm:text-sm text-slate-700 leading-relaxed">
                     {reason}
                   </p>
                   <div className="mt-2.5 flex items-center justify-end">
@@ -452,10 +465,10 @@ export const RomanticVaultView: React.FC = () => {
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
               <input
                 type="text"
-                placeholder="Cari pesan..."
+                placeholder="Cari pesan penyemangat..."
                 value={searchMsg}
                 onChange={(e) => setSearchMsg(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-rose-500 bg-white"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-hidden focus:border-rose-800 bg-white"
               />
             </div>
           </div>
@@ -464,7 +477,7 @@ export const RomanticVaultView: React.FC = () => {
             {filteredMessages.map((msg, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-2xl bg-white border border-rose-100 hover:border-rose-300 shadow-xs flex flex-col justify-between transition-all space-y-2"
+                className="p-4 sm:p-5 rounded-2xl bg-white border border-rose-100 hover:border-rose-300 shadow-2xs flex flex-col justify-between transition-all space-y-2.5"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -473,7 +486,7 @@ export const RomanticVaultView: React.FC = () => {
                     </span>
                     <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400 flex-shrink-0" />
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+                  <p className="font-reading text-xs sm:text-sm text-slate-700 leading-relaxed italic">
                     "{msg}"
                   </p>
                 </div>
@@ -505,8 +518,8 @@ export const RomanticVaultView: React.FC = () => {
       {/* TAB 5: Weekly Connection Ritual (Menu Obrolan LDR) */}
       {activeTab === 'ritual' && (
         <section className="space-y-4">
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-rose-50 via-white to-pink-50 border border-rose-200/90 shadow-xs space-y-4">
-            <div className="flex items-center justify-between">
+          <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-rose-50 via-white to-pink-50 border border-rose-200/90 shadow-2xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-rose-900 flex-shrink-0" />
                 <h3 className="font-display font-bold text-lg sm:text-xl text-slate-900">
@@ -515,21 +528,21 @@ export const RomanticVaultView: React.FC = () => {
               </div>
               <button
                 onClick={handlePickRandomQuestion}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-900 text-white text-xs font-bold hover:bg-rose-800 transition-all cursor-pointer whitespace-nowrap flex-shrink-0"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-900 text-white text-xs sm:text-sm font-bold hover:bg-rose-800 transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto shadow-xs active:scale-98"
               >
                 <Shuffle className="w-3.5 h-3.5 flex-shrink-0" />
                 <span>Acak Pertanyaan</span>
               </button>
             </div>
 
-            <div className="p-6 rounded-2xl bg-white border border-rose-100 shadow-xs text-center space-y-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900 bg-rose-50 px-3 py-1 rounded-md border border-rose-200 whitespace-nowrap">
+            <div className="p-6 rounded-2xl bg-white border border-rose-200 shadow-2xs text-center space-y-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900 bg-rose-50 px-3 py-1 rounded-md border border-rose-200 whitespace-nowrap inline-block">
                 Topik: {currentQuestion.category}
               </span>
               <p className="font-display font-bold text-base sm:text-xl text-slate-800 max-w-xl mx-auto leading-relaxed">
                 "{currentQuestion.question}"
               </p>
-              <p className="text-xs text-slate-400">
+              <p className="font-reading text-xs text-slate-400">
                 Cocok buat ditanyain ke Mas pas teleponan malam ini! 🌙
               </p>
             </div>
@@ -544,16 +557,16 @@ export const RomanticVaultView: React.FC = () => {
                   <button
                     key={q.id}
                     onClick={() => setCurrentQuestion(q)}
-                    className={`p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
+                    className={`p-3.5 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                       currentQuestion.id === q.id
-                        ? 'bg-rose-50 border-rose-900 text-rose-900 font-bold'
+                        ? 'bg-rose-50 border-rose-900 text-rose-900 font-bold shadow-2xs'
                         : 'bg-white border-slate-200/80 hover:border-rose-200 text-slate-700'
                     }`}
                   >
                     <span className="text-[10px] text-rose-600 font-bold uppercase block mb-0.5">
                       {q.category}
                     </span>
-                    "{q.question}"
+                    <span className="font-reading">"{q.question}"</span>
                   </button>
                 ))}
               </div>
@@ -565,7 +578,7 @@ export const RomanticVaultView: React.FC = () => {
       {/* TAB 6: Cerita Kita (First Entry) */}
       {activeTab === 'story' && (
         <section className="space-y-4">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white border border-rose-200 shadow-xs space-y-5">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white border border-rose-200/90 shadow-2xs space-y-5">
             <div className="border-b border-rose-100 pb-3 flex items-center justify-between">
               <div>
                 <span className="text-xs font-bold text-rose-900 bg-rose-50 px-3 py-0.5 rounded-md whitespace-nowrap">
@@ -594,8 +607,14 @@ export const RomanticVaultView: React.FC = () => {
 
       {/* Modal: Reading a Sealed Letter */}
       {selectedLetter && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-rose-200 overflow-hidden flex flex-col max-h-[90vh]">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in"
+          onClick={() => setSelectedLetter(null)}
+        >
+          <div 
+            className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-rose-200 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="px-6 py-4 bg-gradient-to-r from-rose-950 to-rose-900 text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-rose-200 flex-shrink-0" />
@@ -605,13 +624,14 @@ export const RomanticVaultView: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedLetter(null)}
-                className="p-1 rounded-lg text-rose-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-rose-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                title="Tutup (ESC)"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 sm:p-8 overflow-y-auto space-y-5">
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-5 flex-1">
               <h3 className="font-display font-bold text-xl sm:text-2xl text-slate-900">
                 {selectedLetter.title}
               </h3>
@@ -624,14 +644,28 @@ export const RomanticVaultView: React.FC = () => {
                 <span className="font-display italic text-rose-900 font-bold text-sm">
                   Mas kamu🤍
                 </span>
-                <button
-                  onClick={() => handleCopyText(selectedLetter.content, 'modal-letter')}
-                  className="flex items-center gap-1 text-rose-900 font-semibold cursor-pointer"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Salin Surat</span>
-                </button>
+                <span className="text-[11px] text-slate-400">Digital Sanctuary</span>
               </div>
+            </div>
+
+            {/* Modal Bottom Action Bar */}
+            <div className="p-4 bg-rose-50/70 border-t border-rose-100 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => handleCopyText(selectedLetter.content, 'modal-letter')}
+                className="px-4 py-2 rounded-xl bg-white hover:bg-rose-100 border border-rose-200 text-rose-900 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                <span>Salin Surat</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedLetter(null)}
+                className="px-5 py-2 rounded-xl bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Tutup & Kembali</span>
+              </button>
             </div>
           </div>
         </div>
@@ -639,8 +673,14 @@ export const RomanticVaultView: React.FC = () => {
 
       {/* Modal: Reading a Milestone Letter */}
       {selectedMilestone && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-rose-200 overflow-hidden flex flex-col max-h-[90vh]">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in"
+          onClick={() => setSelectedMilestone(null)}
+        >
+          <div 
+            className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-rose-200 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="px-6 py-4 bg-gradient-to-r from-rose-950 to-rose-900 text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Gift className="w-4 h-4 text-rose-200 flex-shrink-0" />
@@ -650,14 +690,15 @@ export const RomanticVaultView: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedMilestone(null)}
-                className="p-1 rounded-lg text-rose-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-rose-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                title="Tutup (ESC)"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 sm:p-8 overflow-y-auto space-y-5">
-              <span className="text-xs font-bold text-rose-900 bg-rose-50 px-3 py-1 rounded-md whitespace-nowrap">
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-5 flex-1">
+              <span className="text-xs font-bold text-rose-900 bg-rose-50 px-3 py-1 rounded-md whitespace-nowrap inline-block">
                 {selectedMilestone.scenario}
               </span>
               <h3 className="font-display font-bold text-xl text-slate-900">
@@ -672,7 +713,28 @@ export const RomanticVaultView: React.FC = () => {
                 <span className="font-display italic text-rose-900 font-bold text-sm">
                   Mas kamu🤍
                 </span>
+                <span className="text-[11px] text-slate-400">Digital Sanctuary</span>
               </div>
+            </div>
+
+            {/* Modal Bottom Action Bar */}
+            <div className="p-4 bg-rose-50/70 border-t border-rose-100 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => handleCopyText(selectedMilestone.content, 'modal-milestone')}
+                className="px-4 py-2 rounded-xl bg-white hover:bg-rose-100 border border-rose-200 text-rose-900 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                <span>Salin Surat</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedMilestone(null)}
+                className="px-5 py-2 rounded-xl bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Tutup & Kembali</span>
+              </button>
             </div>
           </div>
         </div>
@@ -680,8 +742,14 @@ export const RomanticVaultView: React.FC = () => {
 
       {/* Modal: Grand 16 August Birthday Letter */}
       {showBirthdayLetter && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border-2 border-rose-300 overflow-hidden flex flex-col max-h-[90vh]">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-fade-in"
+          onClick={() => setShowBirthdayLetter(false)}
+        >
+          <div 
+            className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border-2 border-rose-300 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="px-6 py-4 bg-gradient-to-r from-rose-950 via-rose-900 to-rose-950 text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Heart className="w-4 h-4 text-rose-200 fill-rose-200 animate-pulse flex-shrink-0" />
@@ -691,13 +759,14 @@ export const RomanticVaultView: React.FC = () => {
               </div>
               <button
                 onClick={() => setShowBirthdayLetter(false)}
-                className="p-1 rounded-lg text-rose-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-rose-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                title="Tutup (ESC)"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 sm:p-9 overflow-y-auto space-y-5">
+            <div className="p-6 sm:p-9 overflow-y-auto space-y-5 flex-1">
               <div className="text-center space-y-1.5 border-b border-rose-100 pb-4">
                 <span className="text-[11px] font-bold text-rose-900 uppercase tracking-widest bg-rose-100 px-3 py-1 rounded-md whitespace-nowrap">
                   16 Agustus
@@ -719,6 +788,28 @@ export const RomanticVaultView: React.FC = () => {
                   Digital Sanctuary • Selalu dan Selamanya
                 </p>
               </div>
+            </div>
+
+            {/* Modal Bottom Action Bar (Fixed, Always Visible & Easy to Close) */}
+            <div className="p-4 sm:p-5 bg-rose-50/80 border-t border-rose-200/90 flex items-center justify-between gap-3 flex-shrink-0">
+              <button
+                type="button"
+                onClick={() => handleCopyText(BIRTHDAY_LETTER.content, 'birthday-modal')}
+                className="px-4 py-2.5 rounded-xl bg-white hover:bg-rose-100 border border-rose-200 text-rose-900 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+              >
+                <Copy className="w-4 h-4" />
+                <span>Salin Surat</span>
+              </button>
+
+              <button
+                type="button"
+                id="close-birthday-letter-bottom-btn"
+                onClick={() => setShowBirthdayLetter(false)}
+                className="px-6 py-2.5 rounded-xl bg-rose-900 hover:bg-rose-800 text-white text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-xs active:scale-95"
+              >
+                <X className="w-4 h-4" />
+                <span>Tutup & Kembali</span>
+              </button>
             </div>
           </div>
         </div>

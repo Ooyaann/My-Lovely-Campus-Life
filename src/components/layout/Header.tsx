@@ -1,10 +1,10 @@
 import React from 'react';
-import { Menu, Heart, Download, Sparkles, PhoneCall } from 'lucide-react';
+import { Menu, Heart, Sparkles, PhoneCall } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { NavigationTab } from '../../types';
 
 interface HeaderProps {
-  onOpenBackup: () => void;
+  onOpenBackup?: () => void;
 }
 
 const TAB_TITLES: Record<NavigationTab, { title: string; subtitle: string }> = {
@@ -26,68 +26,60 @@ export const Header: React.FC<HeaderProps> = ({ onOpenBackup }) => {
   const currentInfo = TAB_TITLES[activeTab] || { title: 'Halo, Sayang', subtitle: 'Workspace Khusus Sayang' };
 
   return (
-    <header className="sticky top-0 z-30 bg-[#fffdfa]/95 backdrop-blur-md border-b border-rose-100 px-4 lg:px-8 py-3 transition-all">
+    <header className="sticky top-0 z-30 bg-[#fffdfa]/95 backdrop-blur-md border-b border-rose-100 px-3.5 sm:px-4 lg:px-8 py-2.5 sm:py-3 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Left: Burger Menu Toggle & Title */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             id="burger-menu-toggle-btn"
             onClick={() => setIsSidebarOpen(true)}
             aria-label="Buka Menu"
-            className="p-2.5 rounded-xl bg-white border border-rose-200 text-[#9f1239] shadow-2xs hover:bg-rose-50 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-xl bg-white border border-rose-200 text-rose-900 shadow-2xs hover:bg-rose-50 active:scale-95 transition-all flex items-center justify-center cursor-pointer flex-shrink-0"
           >
-            <Menu className="w-5 h-5 text-[#9f1239]" />
+            <Menu className="w-4 h-4 text-rose-900" />
           </button>
 
           <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-2">
-              <h1 className="font-display font-bold text-base sm:text-lg lg:text-xl text-rose-900 tracking-tight whitespace-nowrap truncate">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h1 className="font-display font-bold text-sm sm:text-base lg:text-lg text-rose-900 tracking-tight whitespace-nowrap truncate">
                 {currentInfo.title}
               </h1>
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 hidden sm:inline-block animate-pulse flex-shrink-0" />
+              <Heart className="w-3 h-3 text-rose-500 fill-rose-500 hidden sm:inline-block animate-pulse flex-shrink-0" />
             </div>
-            <p className="text-[11px] text-slate-500 hidden sm:block font-sans truncate">
+            <p className="text-[10px] sm:text-[11px] text-slate-500 hidden sm:block font-sans truncate">
               {currentInfo.subtitle}
             </p>
           </div>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Quick SOS / Call Mas */}
           <button
             id="header-sos-btn"
             onClick={() => setActiveTab('kontak-siaga')}
-            className="px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[#9f1239] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-2.5 sm:px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-900 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap"
             title="Mas Siaga 24 Jam"
           >
-            <PhoneCall className="w-3.5 h-3.5 text-[#9f1239]" />
+            <PhoneCall className="w-3.5 h-3.5 text-rose-900" />
             <span className="hidden md:inline">Siaga Mas</span>
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           </button>
 
-          {/* Backup Button */}
-          <button
-            id="header-backup-data-btn"
-            onClick={onOpenBackup}
-            className="px-3 py-1.5 rounded-full bg-white hover:bg-rose-50 border border-rose-200 text-slate-700 hover:text-[#9f1239] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Download className="w-3.5 h-3.5 text-[#9f1239]" />
-            <span className="hidden sm:inline">Cadangkan</span>
-          </button>
-
           {/* Romantic Vault Icon */}
-          <div 
+          <button
+            id="header-vault-btn"
             onClick={() => setActiveTab('romantic-vault')}
-            className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#881337] via-[#9f1239] to-rose-400 p-0.5 shadow-2xs cursor-pointer hover:scale-105 transition-all flex-shrink-0"
-            title="Romantic Vault"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-rose-950 via-rose-900 to-rose-600 p-0.5 shadow-2xs cursor-pointer hover:scale-105 active:scale-95 transition-all flex-shrink-0 flex items-center justify-center"
+            title="Surat & Pesan Mas"
           >
-            <div className="w-full h-full rounded-full bg-[#881337] flex items-center justify-center text-white">
-              <Sparkles className="w-3.5 h-3.5 text-rose-200" />
+            <div className="w-full h-full rounded-full bg-rose-950 flex items-center justify-center text-white">
+              <Sparkles className="w-3 h-3 text-rose-200" />
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </header>
   );
 };
+

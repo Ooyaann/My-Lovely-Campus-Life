@@ -75,22 +75,22 @@ export const ScheduleView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Title & Overview Header */}
-      <section className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-7 shadow-xs">
+      <section className="bg-white rounded-3xl border border-rose-100 p-5 sm:p-7 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-rose-800">
-              <CalendarIcon className="w-6 h-6 text-[#831843]" />
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-rose-100/90 border border-rose-200/60 flex items-center justify-center text-rose-800 flex-shrink-0 shadow-2xs">
+              <CalendarIcon className="w-5 h-5 text-[#831843]" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="font-display font-bold text-xl text-slate-900">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                <h2 className="font-display font-bold text-base sm:text-lg text-slate-900 leading-tight">
                   Jadwal Kuliah Resmi (KRS UPI)
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-[#831843] text-xs font-bold">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-rose-100 text-[#831843] text-[11px] font-bold whitespace-nowrap flex-shrink-0 border border-rose-200/50">
                   Semester Ganjil
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5 line-clamp-1 sm:truncate">
                 Program Studi S-1 Pendidikan Kimia FPMIPA Universitas Pendidikan Indonesia
               </p>
             </div>

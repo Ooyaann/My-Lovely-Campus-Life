@@ -62,21 +62,25 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   }, [isOpen]);
 
   return (
-    <div ref={containerRef} className={`relative w-full ${className}`} id={id}>
+    <div ref={containerRef} className={`relative ${className}`} id={id}>
       {/* Trigger Button */}
       <button
         type="button"
         aria-label={ariaLabel || placeholder}
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-white border text-xs font-semibold transition-all cursor-pointer select-none text-left shadow-xs ${
+        className={`w-full flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-50/80 border text-xs font-semibold transition-all cursor-pointer select-none text-left shadow-2xs ${
           isOpen
-            ? 'border-rose-900 ring-2 ring-rose-900/15 shadow-sm'
-            : 'border-rose-200/90 hover:border-rose-300 hover:bg-rose-50/30'
+            ? 'border-rose-800 ring-2 ring-rose-500/20 bg-white shadow-xs'
+            : 'border-slate-200 hover:border-rose-300'
         }`}
       >
         <div className="flex items-center gap-2 min-w-0 truncate">
-          {LeftIcon && <LeftIcon className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />}
+          {LeftIcon && (
+            <div className="w-5 h-5 rounded-lg bg-rose-100/80 text-rose-900 flex items-center justify-center flex-shrink-0">
+              <LeftIcon className="w-3 h-3" />
+            </div>
+          )}
           
           {/* Color Indicator Dot if option has color */}
           {selectedOption?.color && (
@@ -86,28 +90,32 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
             />
           )}
 
-          <span className="text-slate-800 truncate font-medium">
+          <span className="text-slate-800 truncate font-semibold">
             {selectedOption ? selectedOption.label : placeholder}
           </span>
 
           {selectedOption?.count !== undefined && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-rose-100/80 text-rose-900 font-bold flex-shrink-0">
+            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-rose-100/90 text-rose-900 font-bold flex-shrink-0">
               {selectedOption.count}
             </span>
           )}
         </div>
 
-        <ChevronDown
-          className={`w-4 h-4 text-rose-900 transition-transform duration-200 flex-shrink-0 ${
-            isOpen ? 'rotate-180 text-rose-950' : 'text-rose-900/70'
-          }`}
-        />
+        <div className={`w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+          isOpen ? 'bg-rose-100 text-rose-900' : 'text-slate-400 group-hover:text-rose-800'
+        }`}>
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+              isOpen ? 'rotate-180 text-rose-900' : 'text-slate-400'
+            }`}
+          />
+        </div>
       </button>
 
-      {/* Floating Custom Dropdown Menu */}
+      {/* Floating Custom Dropdown Popup Menu */}
       {isOpen && (
-        <div className="absolute z-50 mt-1.5 w-full min-w-[200px] max-h-60 overflow-y-auto rounded-2xl bg-white/95 backdrop-blur-md border border-rose-100 p-1.5 shadow-xl shadow-rose-950/10 animate-fade-in divide-y divide-rose-50">
-          <div className="space-y-0.5">
+        <div className="absolute z-50 mt-1.5 w-full min-w-[220px] max-h-64 overflow-y-auto rounded-2xl bg-white border border-rose-200/90 p-1.5 shadow-2xl shadow-rose-950/15 animate-in fade-in zoom-in-95 duration-150 right-0 sm:right-auto sm:left-0 divide-y-0">
+          <div className="space-y-1">
             {options.map((option) => {
               const isSelected = option.value === value;
               const OptIcon = option.icon;
@@ -153,7 +161,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                         className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold ${
                           isSelected
                             ? 'bg-white/20 text-white'
-                            : 'bg-rose-100/70 text-rose-900'
+                            : 'bg-rose-100/80 text-rose-900'
                         }`}
                       >
                         {option.count}
@@ -161,7 +169,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                     )}
 
                     {isSelected && (
-                      <Check className="w-3.5 h-3.5 text-white flex-shrink-0 ml-1 animate-scale-up" />
+                      <Check className="w-3.5 h-3.5 text-white flex-shrink-0 ml-1" />
                     )}
                   </div>
                 </button>

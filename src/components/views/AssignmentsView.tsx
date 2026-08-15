@@ -488,7 +488,7 @@ export const AssignmentsView: React.FC = () => {
                     onClick={handleAddSubtaskField}
                     className="text-[11px] font-bold text-rose-800 hover:underline cursor-pointer"
                   >
-                    + Tambah Langkah
+                    Tambah Langkah
                   </button>
                 </div>
                 <div className="space-y-2">
@@ -563,7 +563,7 @@ export const AssignmentsView: React.FC = () => {
               {/* Form Add New Task Type */}
               <form onSubmit={handleCreateTypeSubmit} className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-3">
                 <span className="text-xs font-bold text-slate-900 block">
-                  + Buat Tipe Tugas Baru
+                  Buat Tipe Tugas Baru
                 </span>
                 <div>
                   <input
