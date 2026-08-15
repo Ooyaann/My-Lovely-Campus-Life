@@ -90,6 +90,25 @@ export interface GoalItem {
   category: 'Kencan' | 'Kuliah Bareng' | 'Mimpi Bersama' | 'Kuliner';
 }
 
+export interface SemesterTarget {
+  targetIPK: string;
+  currentIPS: string;
+  targetSKS: string;
+  semesterName: string;
+  predicate: string;
+  motivationNote: string;
+}
+
+export interface ReflectionItem {
+  id: string;
+  date: string;
+  title: string;
+  category: 'Praktikum & Lab' | 'Perkuliahan' | 'Pengembangan Diri' | 'Momen Manis' | 'Evaluasi Diri';
+  mood: string;
+  content: string;
+  createdAt: string;
+}
+
 export interface LoveNoteEntry {
   id: string;
   date: string;

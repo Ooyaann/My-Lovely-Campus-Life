@@ -4,6 +4,7 @@ import { ChevronDown, Check } from 'lucide-react';
 export interface CustomSelectOption {
   value: string;
   label: string;
+  description?: string;
   count?: number | string;
   color?: string;
   bg?: string;
@@ -152,7 +153,16 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                       />
                     )}
 
-                    <span className="truncate">{option.label}</span>
+                    <div className="min-w-0 truncate">
+                      <span className="truncate block font-semibold">{option.label}</span>
+                      {option.description && (
+                        <span className={`text-[10px] truncate block ${
+                          isSelected ? 'text-rose-100' : 'text-slate-400'
+                        }`}>
+                          {option.description}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-1.5 flex-shrink-0">

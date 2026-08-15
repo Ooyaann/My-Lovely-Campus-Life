@@ -121,7 +121,7 @@ export const BackupModal: React.FC<BackupModalProps> = ({ isOpen, onClose }) => 
               <textarea
                 value={jsonInput}
                 onChange={(e) => setJsonInput(e.target.value)}
-                placeholder='{"appName": "My Lovely Campus Life", ...}'
+                placeholder='{"appName": "My Lovely Campus Diary", ...}'
                 rows={3}
                 className="w-full p-2.5 text-xs bg-white rounded-xl border border-slate-200 font-mono text-slate-700 focus:outline-none focus:ring-1 focus:ring-rose-500"
               />

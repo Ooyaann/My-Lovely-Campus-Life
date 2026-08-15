@@ -770,27 +770,33 @@ export const HabitsFocusView: React.FC = () => {
 
       {/* 3. Hydration / Water Tracker (8 Glasses / 2 Liters) */}
       <section className="bg-white rounded-3xl border border-rose-200/90 p-5 sm:p-7 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
+        {/* Header with Clean One-Line Layout */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-3.5 min-w-0">
             <div className="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-blue-700 flex-shrink-0 shadow-2xs">
               <Droplets className="w-6 h-6 text-blue-600" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="font-display font-bold text-base sm:text-lg text-slate-900">
-                  Pengingat Hidrasi Air Putih (Target 2 Liter)
+            <div className="min-w-0">
+              <div className="flex items-center flex-wrap gap-2.5">
+                <h2 className="font-display font-bold text-base sm:text-lg text-slate-900 truncate">
+                  Pengingat Hidrasi Air Putih
                 </h2>
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  {waterCount * 250} / 2000 mL
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold whitespace-nowrap flex-shrink-0 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                  <span>{waterCount * 250} / 2.000 mL</span>
+                </span>
+                <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md whitespace-nowrap hidden sm:inline-block">
+                  Target 2 Liter
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-1 truncate">
                 Jaga cairan tubuh saat beraktivitas praktikum di laboratorium FPMIPA UPI.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          {/* Action Controls in a unified neat row */}
+          <div className="flex items-center gap-2 self-start lg:self-center flex-shrink-0">
             <button
               onClick={decrementWater}
               disabled={waterCount === 0}
@@ -816,6 +822,20 @@ export const HabitsFocusView: React.FC = () => {
           </div>
         </div>
 
+        {/* Linear Progress Indicator */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-medium text-slate-600">
+            <span>Progres Hidrasi Harian</span>
+            <span className="font-bold text-blue-700">{Math.min(100, Math.round((waterCount / 8) * 100))}% Tercapai</span>
+          </div>
+          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200/60 p-0.5">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-sky-400 to-blue-600 transition-all duration-500"
+              style={{ width: `${Math.min(100, (waterCount / 8) * 100)}%` }}
+            />
+          </div>
+        </div>
+
         {/* 8 Glasses Visual Grid */}
         <div className="grid grid-cols-4 sm:grid-cols-8 gap-2.5 pt-1">
           {Array.from({ length: 8 }).map((_, idx) => {
@@ -827,13 +847,13 @@ export const HabitsFocusView: React.FC = () => {
                 onClick={idx === waterCount ? incrementWater : undefined}
                 className={`p-3.5 rounded-2xl border flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer ${
                   isFilled
-                    ? 'bg-blue-50/90 border-blue-300 text-blue-950 font-bold shadow-2xs'
+                    ? 'bg-blue-50/90 border-blue-300 text-blue-950 font-bold shadow-2xs ring-1 ring-blue-400/30'
                     : 'bg-slate-50/50 border-slate-200 text-slate-400 hover:border-blue-300 hover:bg-blue-50/30'
                 }`}
               >
                 <Droplets className={`w-5 h-5 transition-transform ${isFilled ? 'text-blue-600 fill-blue-500 scale-110' : 'text-slate-300'}`} />
                 <span className="text-[11px] whitespace-nowrap font-semibold">Gelas {idx + 1}</span>
-                <span className="text-[9px] text-slate-400">{250 * (idx + 1)} ml</span>
+                <span className="text-[9px] text-slate-400 whitespace-nowrap">{250 * (idx + 1)} ml</span>
               </button>
             );
           })}
@@ -841,13 +861,13 @@ export const HabitsFocusView: React.FC = () => {
 
         <div className="text-xs text-center text-slate-600 pt-1 flex items-center justify-center gap-2">
           {waterCount >= 8 ? (
-            <span className="text-emerald-800 font-bold flex items-center justify-center gap-1.5 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200">
+            <span className="text-emerald-800 font-bold flex items-center justify-center gap-1.5 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200 shadow-2xs">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              Target 8 gelas (2.000 mL) tercapai hari ini. Keren banget!
+              Target 8 gelas (2.000 mL) tercapai hari ini. Keren banget Sayang!
             </span>
           ) : (
             <span className="font-medium">
-              Tercatat: <strong>{waterCount}</strong> dari <strong>8 gelas</strong> ({waterCount * 250} mL) • Kurang {Math.max(0, 8 - waterCount)} gelas lagi
+              Tercatat: <strong className="text-slate-900">{waterCount}</strong> dari <strong className="text-slate-900">8 gelas</strong> ({waterCount * 250} mL) • Kurang {Math.max(0, 8 - waterCount)} gelas lagi
             </span>
           )}
         </div>

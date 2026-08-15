@@ -72,15 +72,52 @@ export const HomeView: React.FC = () => {
   const todayCourses = courses.filter((c) => c.day === currentDayName);
 
   const moodOptions = [
-    { label: 'Ceria ✨' },
-    { label: 'Pusing Lab 🧪' },
-    { label: 'Semangat Ambis 🔥' },
-    { label: 'Butuh Kopi ☕' },
-    { label: 'Kangen Mas ❤️' },
-    { label: 'Lelah 🔋' }
+    { 
+      label: 'Ceria ✨', 
+      icon: Smile, 
+      desc: 'Hepi & bersemangat',
+      note: 'Senang banget lihat kamu tersenyum bahagia hari ini! Pertahankan energi positifmu ya sayang 💖' 
+    },
+    { 
+      label: 'Pusing Lab 🧪', 
+      icon: FlaskConical, 
+      desc: 'Praktikum padat',
+      note: 'Tarik napas dulu ya sayang. Praktikum Kimianya Mas temani lewat doa, jangan lupa minum air putih & istirahat 🤍' 
+    },
+    { 
+      label: 'Semangat Ambis 🔥', 
+      icon: Flame, 
+      desc: 'Fokus tancap gas',
+      note: 'Keren banget calon guru kimia idaman Mas! Semangat belajarnya, tapi tetap ingat jaga kesehatan yaa 💪' 
+    },
+    { 
+      label: 'Butuh Kopi ☕', 
+      icon: Coffee, 
+      desc: 'Mata sepet & ngantuk',
+      note: 'Ngantuk ya sayang? Boleh ngopi atau stretching sebentar, jangan dipaksa kalau badan sudah lelah yaa ☕' 
+    },
+    { 
+      label: 'Kangen Mas ❤️', 
+      icon: Heart, 
+      desc: 'Pengen dekap & teleponan',
+      note: 'Mas juga selalu kangen kamu sayang! Nanti malam jam 9 kita teleponan yaa, peluk hangat dari jauh 🥰' 
+    },
+    { 
+      label: 'Lelah 🔋', 
+      icon: Battery, 
+      desc: 'Butuh istirahat',
+      note: 'Rebahan dulu yuk sayang. Nggak apa-apa istirahat sejenak, kamu sudah berjuang luar biasa hari ini 🛌' 
+    }
   ];
 
-  const energyOptions = [25, 50, 75, 100];
+  const energyLevels = [
+    { level: 25, status: 'Low / Butuh Rebahan', desc: 'Perlu istirahat', bg: 'bg-rose-500' },
+    { level: 50, status: 'Santai & Cukup', desc: 'Stabil', bg: 'bg-amber-500' },
+    { level: 75, status: 'Produktif & Segar', desc: 'Bagus', bg: 'bg-sky-500' },
+    { level: 100, status: 'Full Power On Fire!', desc: 'Maksimal', bg: 'bg-emerald-500' }
+  ];
+
+  const selectedMoodObj = moodOptions.find(m => m.label === currentMood.mood) || moodOptions[0];
 
   const handleCopyQuote = () => {
     navigator.clipboard.writeText(`"${currentQuote}" — Dari Mas 🤍`);
@@ -217,55 +254,155 @@ export const HomeView: React.FC = () => {
       </section>
 
       {/* 3. Mood & Energy Quick Check-In */}
-      <section className="p-4 sm:p-5 rounded-3xl bg-white border border-rose-100/80 shadow-xs space-y-3.5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-rose-900 flex-shrink-0" />
-            <h3 className="text-xs sm:text-sm font-bold text-slate-800 uppercase tracking-wider whitespace-nowrap">
-              Bagaimana Harimu Hari Ini, Sayang?
-            </h3>
+      <section className="p-5 sm:p-6 rounded-3xl bg-white border border-rose-100/90 shadow-xs space-y-4 transition-all">
+        {/* Header Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-rose-100/60">
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-2xl bg-rose-100/80 text-rose-900 flex-shrink-0">
+              <Sparkles className="w-4 h-4 text-rose-800" />
+            </span>
+            <div>
+              <h3 className="font-display font-bold text-sm sm:text-base text-slate-800 tracking-tight">
+                Bagaimana Harimu Hari Ini, Sayang?
+              </h3>
+              <p className="text-[11px] text-slate-500">
+                Catat suasana hati & energimu agar Mas bisa selalu mengerti keadaanmu 🤍
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap">
-              Energi: <strong className="text-rose-900">{currentMood.energy}%</strong>
+
+          {/* Active Mood & Energy Badges */}
+          <div className="flex items-center gap-2 self-start sm:self-center flex-wrap">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-50 text-rose-900 border border-rose-200/70 text-xs font-bold whitespace-nowrap shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+              <span>{currentMood.mood || 'Ceria ✨'}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold whitespace-nowrap">
+              <Battery className="w-3.5 h-3.5 text-rose-700 flex-shrink-0" />
+              <span>Energi {currentMood.energy}%</span>
             </span>
           </div>
         </div>
 
-        {/* Mood Selector: Clean non-scrolling Grid with Dropdown Fallback */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-          {moodOptions.map((opt) => (
-            <button
-              key={opt.label}
-              onClick={() => updateMood(opt.label, currentMood.energy)}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all text-center cursor-pointer border ${
-                currentMood.mood === opt.label
-                  ? 'bg-rose-900 text-white border-rose-900 shadow-xs font-bold'
-                  : 'bg-rose-50/50 hover:bg-rose-100/80 text-slate-700 border-rose-100/80'
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
+        {/* Mood Selector Grid */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider text-[10px]">
+              Pilih Mood Saat Ini:
+            </span>
+            <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
+              Klik untuk memperbarui mood
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+            {moodOptions.map((opt) => {
+              const isSelected = currentMood.mood === opt.label;
+              const Icon = opt.icon;
+              return (
+                <button
+                  key={opt.label}
+                  onClick={() => {
+                    updateMood(opt.label, currentMood.energy);
+                    showToast(`Mood diperbarui: ${opt.label}`);
+                  }}
+                  className={`group relative p-3 rounded-2xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between gap-2 ${
+                    isSelected
+                      ? 'bg-rose-900 text-white border-rose-900 shadow-sm ring-2 ring-rose-900/20 scale-[1.02]'
+                      : 'bg-rose-50/40 hover:bg-rose-100/60 text-slate-700 border-rose-100/80 hover:border-rose-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className={`p-1.5 rounded-xl ${isSelected ? 'bg-white/20 text-white' : 'bg-white text-rose-900 shadow-2xs'}`}>
+                      <Icon className="w-3.5 h-3.5" />
+                    </span>
+                    {isSelected && (
+                      <span className="w-2 h-2 rounded-full bg-rose-300" />
+                    )}
+                  </div>
+                  <div>
+                    <h4 className={`text-xs font-bold leading-tight ${isSelected ? 'text-white' : 'text-slate-800'}`}>
+                      {opt.label}
+                    </h4>
+                    <p className={`text-[10px] mt-0.5 font-medium leading-tight line-clamp-1 ${isSelected ? 'text-rose-200' : 'text-slate-500'}`}>
+                      {opt.desc}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Energy Meter Buttons (Full Width Grid) */}
-        <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center gap-2">
-          <span className="text-[11px] text-slate-500 font-medium whitespace-nowrap">Tingkat Energi:</span>
-          <div className="grid grid-cols-4 gap-2 flex-1">
-            {energyOptions.map((lvl) => (
-              <button
-                key={lvl}
-                onClick={() => updateMood(currentMood.mood, lvl)}
-                className={`py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
-                  currentMood.energy === lvl
-                    ? 'bg-rose-900 text-white border border-rose-900 shadow-xs'
-                    : 'bg-slate-100 hover:bg-rose-50 text-slate-600 border border-slate-200/80'
-                }`}
-              >
-                {lvl}%
-              </button>
-            ))}
+        {/* Dynamic Sweet Note based on active mood */}
+        {selectedMoodObj && (
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-rose-50/90 via-pink-50/60 to-rose-50/90 border border-rose-100 flex items-center gap-3 animate-fade-in">
+            <span className="p-1.5 rounded-xl bg-white text-rose-900 shadow-2xs flex-shrink-0">
+              <Heart className="w-4 h-4 text-rose-600 fill-rose-600 animate-pulse" />
+            </span>
+            <p className="text-xs text-slate-700 font-medium leading-relaxed">
+              <strong className="text-rose-950 font-bold">Pesan Sayang:</strong> {selectedMoodObj.note}
+            </p>
+          </div>
+        )}
+
+        {/* Energy Meter with Interactive Segmented Controls & Visual Track */}
+        <div className="pt-3 border-t border-rose-100/60 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <Battery className="w-4 h-4 text-rose-900" />
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider text-[10px]">
+                Level Energi Fisik & Mental:
+              </span>
+            </div>
+            <span className="text-xs font-bold text-rose-950">
+              {currentMood.energy}% • {energyLevels.find(e => e.level === currentMood.energy)?.status || ''}
+            </span>
+          </div>
+
+          {/* Visual Progress Track */}
+          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden p-0.5 border border-slate-200/50">
+            <div
+              className={`h-full rounded-full transition-all duration-500 ${
+                currentMood.energy <= 25
+                  ? 'bg-rose-500'
+                  : currentMood.energy <= 50
+                  ? 'bg-amber-500'
+                  : currentMood.energy <= 75
+                  ? 'bg-sky-500'
+                  : 'bg-emerald-500'
+              }`}
+              style={{ width: `${currentMood.energy}%` }}
+            />
+          </div>
+
+          {/* 4 Clickable Energy Pills */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {energyLevels.map((lvl) => {
+              const isSelected = currentMood.energy === lvl.level;
+              return (
+                <button
+                  key={lvl.level}
+                  onClick={() => {
+                    updateMood(currentMood.mood, lvl.level);
+                    showToast(`Level energi diatur ke ${lvl.level}%`);
+                  }}
+                  className={`py-2 px-3 rounded-2xl text-xs transition-all cursor-pointer border flex items-center justify-between gap-2 ${
+                    isSelected
+                      ? 'bg-rose-900 text-white border-rose-900 shadow-xs font-bold'
+                      : 'bg-slate-50/80 hover:bg-rose-50 text-slate-700 border-slate-200/80 hover:border-rose-200 font-semibold'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 truncate">
+                    <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-rose-300' : lvl.bg}`} />
+                    <span className="truncate">{lvl.status}</span>
+                  </div>
+                  <span className={`text-[11px] font-bold ${isSelected ? 'text-rose-200' : 'text-slate-500'}`}>
+                    {lvl.level}%
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>

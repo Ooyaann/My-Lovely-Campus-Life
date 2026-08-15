@@ -39,6 +39,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenBackup }) => {
             <Menu className="w-4 h-4 text-rose-900" />
           </button>
 
+          <img
+            src="/logo.jpg"
+            alt="Campus Diary Logo"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover border border-rose-200 shadow-2xs flex-shrink-0 cursor-pointer"
+            onClick={() => setActiveTab('beranda')}
+          />
+
           <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <h1 className="font-display font-bold text-sm sm:text-base lg:text-lg text-rose-900 tracking-tight whitespace-nowrap truncate">

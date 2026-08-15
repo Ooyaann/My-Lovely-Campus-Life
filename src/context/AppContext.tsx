@@ -737,7 +737,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Data Backup / Restore
   const exportDataJSON = () => {
     const backupObj = {
-      appName: 'My Lovely Campus Life',
+      appName: 'My Lovely Campus Diary',
       exportedAt: new Date().toISOString(),
       owner: 'Mas & Sayang',
       masPhone,

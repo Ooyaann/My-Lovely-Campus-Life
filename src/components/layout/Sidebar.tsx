@@ -102,12 +102,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenBackup }) => {
         {/* Sidebar Header with Bright Maroon Gradient */}
         <div className="p-4 border-b border-rose-100 flex items-center justify-between bg-gradient-to-r from-[#881337] via-[#9f1239] to-[#be123c] text-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-xs flex items-center justify-center border border-white/20">
-              <Heart className="w-5 h-5 text-rose-200 fill-rose-200" />
-            </div>
+            <img
+              src="/logo.jpg"
+              alt="My Lovely Campus Diary Logo"
+              className="w-10 h-10 rounded-xl object-cover border border-white/30 shadow-xs flex-shrink-0"
+            />
             <div>
               <h2 className="font-display font-bold text-base tracking-wide text-white">
-                My Lovely Campus
+                Campus Diary
               </h2>
               <p className="text-[11px] text-rose-100 font-sans">
                 Karya Mas untuk Sayang 🤍
