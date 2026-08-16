@@ -44,7 +44,6 @@ export const AssignmentsView: React.FC = () => {
   const [selectedTypeId, setSelectedTypeId] = useState<string>('Semua');
   const [filterStatus, setFilterStatus] = useState<'Semua' | 'Belum' | 'Selesai'>('Semua');
   const [sortOption, setSortOption] = useState<'terdekat' | 'terjauh' | 'prioritas' | 'terbaru'>('terdekat');
-  const [dateFilter, setDateFilter] = useState<'semua' | 'hari-ini' | 'pra-acara' | 'pelaksanaan' | 'pasca-acara'>('semua');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showTypeManagerModal, setShowTypeManagerModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<AssignmentTask | null>(null);
@@ -187,29 +186,6 @@ export const AssignmentsView: React.FC = () => {
       // 2. Filter by status
       if (filterStatus === 'Belum' && task.isDone) return false;
       if (filterStatus === 'Selesai' && !task.isDone) return false;
-
-      // 3. Filter by date category
-      if (dateFilter !== 'semua') {
-        const ts = parseDeadlineToTimestamp(task.deadline);
-        const day16 = new Date(2026, 7, 16, 23, 59, 59).getTime();
-        const day18 = new Date(2026, 7, 18, 23, 59, 59).getTime();
-        const day20 = new Date(2026, 7, 20, 0, 0, 0).getTime();
-
-        if (dateFilter === 'hari-ini') {
-          const isDay16 = task.deadline.toLowerCase().includes('16 agustus') || ts <= day16;
-          if (!isDay16) return false;
-        } else if (dateFilter === 'pra-acara') {
-          const isPra = ts <= day18 || task.deadline.toLowerCase().includes('16 agustus') || task.deadline.toLowerCase().includes('17 agustus') || task.deadline.toLowerCase().includes('18 agustus') || task.deadline.toLowerCase().includes('h-1');
-          if (!isPra) return false;
-        } else if (dateFilter === 'pelaksanaan') {
-          const isPelaksanaan = task.deadline.toLowerCase().includes('18 agustus') || task.deadline.toLowerCase().includes('19 agustus') || task.deadline.toLowerCase().includes('20 agustus') || task.deadline.toLowerCase().includes('21 agustus') || task.deadline.toLowerCase().includes('day 1') || task.deadline.toLowerCase().includes('day 3') || task.deadline.toLowerCase().includes('day 4');
-          if (!isPelaksanaan) return false;
-        } else if (dateFilter === 'pasca-acara') {
-          const isPasca = ts >= day20 || task.deadline.toLowerCase().includes('20 agustus') || task.deadline.toLowerCase().includes('21 agustus') || task.deadline.toLowerCase().includes('22 agustus') || task.deadline.toLowerCase().includes('h+1') || task.deadline.toLowerCase().includes('h+2') || task.deadline.toLowerCase().includes('h+3');
-          if (!isPasca) return false;
-        }
-      }
-
       return true;
     })
     .sort((a, b) => {
@@ -316,8 +292,8 @@ export const AssignmentsView: React.FC = () => {
           </div>
         </div>
 
-        {/* Filter Controls (Clean Custom Dropdowns + Quick Date Pills) */}
-        <div className="pt-4 border-t border-slate-100 space-y-3.5">
+        {/* Filter Controls (Clean 3-Column Selectors) */}
+        <div className="pt-4 border-t border-slate-100">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {/* 1. Category / Type Filter */}
             <div className="space-y-1.5">
@@ -369,56 +345,24 @@ export const AssignmentsView: React.FC = () => {
               />
             </div>
 
-            {/* 3. Sort Order (Nearest deadline, Farthest, Priority, Newest) */}
+            {/* 3. Sort Order (Clean Text & Lucide Icons) */}
             <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
               <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
                 <ArrowUpDown className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />
-                <span>Urutan Tanggal & Deadline:</span>
+                <span>Urutkan Tugas:</span>
               </label>
               <CustomSelect
                 value={sortOption}
                 onChange={(val) => setSortOption(val as any)}
                 options={[
-                  { value: 'terdekat', label: '📅 Deadline Terdekat (Segera)', color: '#be123c' },
-                  { value: 'terjauh', label: '🗓️ Deadline Terjauh', color: '#0284c7' },
-                  { value: 'prioritas', label: '⚡ Prioritas Tertinggi', color: '#d97706' },
-                  { value: 'terbaru', label: '✨ Baru Ditambahkan', color: '#7c3aed' }
+                  { value: 'terdekat', label: 'Deadline Terdekat', color: '#be123c' },
+                  { value: 'terjauh', label: 'Deadline Terjauh', color: '#0284c7' },
+                  { value: 'prioritas', label: 'Prioritas Tertinggi', color: '#d97706' },
+                  { value: 'terbaru', label: 'Baru Ditambahkan', color: '#7c3aed' }
                 ]}
                 ariaLabel="Urutkan Tanggal"
               />
             </div>
-          </div>
-
-          {/* Quick Date Range Pill Filter */}
-          <div className="pt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1 mr-1">
-              <Calendar className="w-3.5 h-3.5 text-rose-800" />
-              <span>Jadwal:</span>
-            </span>
-
-            {[
-              { id: 'semua', label: 'Semua Tanggal' },
-              { id: 'hari-ini', label: '🔴 Deadline Hari Ini (16 Ags)' },
-              { id: 'pra-acara', label: '🟡 Pra-Acara (16-18 Ags)' },
-              { id: 'pelaksanaan', label: '🔵 Pelaksanaan (18-21 Ags)' },
-              { id: 'pasca-acara', label: '🟢 Pasca & Pengganti' }
-            ].map((tab) => {
-              const active = dateFilter === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setDateFilter(tab.id as any)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                    active
-                      ? 'bg-rose-900 text-white shadow-xs scale-102'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
           </div>
         </div>
       </section>
@@ -493,17 +437,17 @@ export const AssignmentsView: React.FC = () => {
                         {task.priority}
                       </span>
 
-                      {/* Deadline Urgency Badge */}
+                      {/* Deadline Urgency Badge (Clean Lucide Icons without Emojis) */}
                       {!task.isDone && isTodayDeadline && (
-                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-600 text-white animate-pulse flex items-center gap-1 shadow-2xs">
-                          <AlertCircle className="w-2.5 h-2.5" />
-                          <span>Deadline Hari Ini!</span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-600 text-white flex items-center gap-1 shadow-2xs">
+                          <AlertCircle className="w-3 h-3 text-white" />
+                          <span>Deadline Hari Ini</span>
                         </span>
                       )}
 
                       {!task.isDone && !isTodayDeadline && isTomorrowDeadline && (
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
-                          <Clock className="w-2.5 h-2.5 text-amber-700" />
+                          <Clock className="w-3 h-3 text-amber-700" />
                           <span>Segera</span>
                         </span>
                       )}
