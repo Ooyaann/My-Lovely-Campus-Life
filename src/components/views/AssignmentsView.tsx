@@ -14,10 +14,12 @@ import {
   ChevronDown,
   ChevronUp,
   X,
-  BookOpen
+  BookOpen,
+  RotateCcw,
+  AlertTriangle
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { TaskPriority } from '../../types';
+import { TaskPriority, AssignmentTask, TaskTypeConfig } from '../../types';
 import { CustomSelect, CustomSelectOption } from '../common/CustomSelect';
 
 export const AssignmentsView: React.FC = () => {
@@ -27,16 +29,21 @@ export const AssignmentsView: React.FC = () => {
     taskTypes,
     addTaskType,
     deleteTaskType,
+    resetTaskTypesToDefault,
     addAssignment, 
     toggleAssignment, 
     toggleSubtask,
-    deleteAssignment 
+    deleteAssignment,
+    resetAssignmentsToDefault
   } = useApp();
 
   const [selectedTypeId, setSelectedTypeId] = useState<string>('Semua');
   const [filterStatus, setFilterStatus] = useState<'Semua' | 'Belum' | 'Selesai'>('Semua');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showTypeManagerModal, setShowTypeManagerModal] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<AssignmentTask | null>(null);
+  const [typeToDelete, setTypeToDelete] = useState<TaskTypeConfig | null>(null);
+  const [showRestoreConfirmModal, setShowRestoreConfirmModal] = useState(false);
 
   // Form State for Adding Task
   const [title, setTitle] = useState('');
@@ -163,13 +170,22 @@ export const AssignmentsView: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setShowRestoreConfirmModal(true)}
+              className="flex items-center gap-1.5 px-3 py-2.5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200/80 text-xs font-semibold transition-all cursor-pointer"
+              title="Pulihkan seluruh daftar tugas resmi MOKA-KU UPI & FPMIPA"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
+              <span className="hidden sm:inline">Pulihkan Tugas MOKA-KU</span>
+              <span className="sm:hidden">Pulihkan</span>
+            </button>
             <button
               onClick={() => setShowTypeManagerModal(true)}
               className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-semibold transition-all cursor-pointer"
             >
               <Tag className="w-3.5 h-3.5" />
-              <span>Kelola Tipe Tugas</span>
+              <span>Kelola Kategori</span>
             </button>
             <button
               id="add-assignment-btn"
@@ -260,12 +276,19 @@ export const AssignmentsView: React.FC = () => {
       {/* Task List */}
       <div className="space-y-3">
         {filteredTasks.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-3xl border border-dashed border-rose-200 text-slate-500 space-y-2">
+          <div className="p-12 text-center bg-white rounded-3xl border border-dashed border-rose-200 text-slate-500 space-y-3">
             <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-500 mb-2 opacity-80" />
             <p className="font-display font-semibold text-slate-800">Tidak ada tugas pada filter ini</p>
             <p className="text-xs text-slate-400">
-              Kamu bisa membuat tugas baru atau mengganti filter tipe tugas di atas.
+              Kamu bisa membuat tugas baru, mengganti filter tipe tugas, atau memulihkan daftar tugas MOKA-KU.
             </p>
+            <button
+              onClick={() => setShowRestoreConfirmModal(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold cursor-pointer transition-all"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
+              <span>Pulihkan 14 Tugas MOKA-KU UPI & FPMIPA</span>
+            </button>
           </div>
         ) : (
           filteredTasks.map((task) => {
@@ -333,9 +356,9 @@ export const AssignmentsView: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Delete Button */}
+                  {/* Delete Button with Confirmation */}
                   <button
-                    onClick={() => deleteAssignment(task.id)}
+                    onClick={() => setTaskToDelete(task)}
                     className="p-1.5 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all cursor-pointer flex-shrink-0"
                     title="Hapus Tugas"
                   >
@@ -634,9 +657,9 @@ export const AssignmentsView: React.FC = () => {
 
                     {taskTypes.length > 1 && (
                       <button
-                        onClick={() => deleteTaskType(type.id)}
+                        onClick={() => setTypeToDelete(type)}
                         className="p-1.5 text-slate-400 hover:text-rose-600 cursor-pointer flex-shrink-0"
-                        title="Hapus Tipe"
+                        title="Hapus Kategori"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -644,6 +667,128 @@ export const AssignmentsView: React.FC = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Restore default types button */}
+              <div className="pt-3 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span className="text-[11px] text-slate-500">Kategori hilang atau salah hapus?</span>
+                <button
+                  type="button"
+                  onClick={() => resetTaskTypesToDefault()}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
+                  <span>Pulihkan Kategori Default</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CONFIRMATION MODAL: Delete Task Type (Label) */}
+      {typeToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border border-rose-100 space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center mx-auto">
+              <AlertTriangle className="w-6 h-6" />
+            </div>
+            <div className="text-center space-y-1">
+              <h3 className="font-display font-bold text-base text-slate-900">
+                Hapus Kategori "{typeToDelete.name}"?
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Kategori ini akan dihapus dari daftar label. Tugas yang sudah ada dengan kategori ini tidak akan terhapus.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                onClick={() => setTypeToDelete(null)}
+                className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer hover:bg-slate-200 transition-all"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => {
+                  deleteTaskType(typeToDelete.id);
+                  setTypeToDelete(null);
+                }}
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer shadow-xs transition-all"
+              >
+                Ya, Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CONFIRMATION MODAL: Delete Task */}
+      {taskToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border border-rose-100 space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center mx-auto">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            <div className="text-center space-y-1">
+              <h3 className="font-display font-bold text-base text-slate-900 line-clamp-2">
+                Hapus Tugas "{taskToDelete.title}"?
+              </h3>
+              <p className="text-xs text-slate-500">
+                Tugas ini akan dihapus permanen dari daftar tugas kamu.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                onClick={() => setTaskToDelete(null)}
+                className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer hover:bg-slate-200 transition-all"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => {
+                  deleteAssignment(taskToDelete.id);
+                  setTaskToDelete(null);
+                }}
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer shadow-xs transition-all"
+              >
+                Ya, Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CONFIRMATION MODAL: Restore MOKA-KU Tasks */}
+      {showRestoreConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-rose-100 space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto">
+              <RotateCcw className="w-6 h-6" />
+            </div>
+            <div className="text-center space-y-1">
+              <h3 className="font-display font-bold text-base text-slate-900">
+                Pulihkan Semua Tugas MOKA-KU UPI & FPMIPA?
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Tindakan ini akan memulihkan seluruh 14 daftar tugas resmi MOKA-KU UPI (Univ) & MOKA-KU FPMIPA 2026 beserta seluruh kategori labelnya.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                onClick={() => setShowRestoreConfirmModal(false)}
+                className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer hover:bg-slate-200 transition-all"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => {
+                  resetTaskTypesToDefault();
+                  resetAssignmentsToDefault();
+                  setShowRestoreConfirmModal(false);
+                }}
+                className="flex-1 py-2.5 rounded-xl bg-[#831843] hover:bg-[#9f1239] text-white text-xs font-semibold cursor-pointer shadow-xs transition-all"
+              >
+                Ya, Pulihkan Semua
+              </button>
             </div>
           </div>
         </div>

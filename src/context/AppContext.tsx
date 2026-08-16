@@ -61,6 +61,7 @@ interface AppContextType {
   taskTypes: TaskTypeConfig[];
   addTaskType: (name: string, color: string, bgLight: string, description?: string) => void;
   deleteTaskType: (id: string) => void;
+  resetTaskTypesToDefault: () => void;
   assignments: AssignmentTask[];
   addAssignment: (task: {
     title: string;
@@ -75,6 +76,7 @@ interface AppContextType {
   toggleAssignment: (id: string) => void;
   toggleSubtask: (taskId: string, subtaskId: string) => void;
   deleteAssignment: (id: string) => void;
+  resetAssignmentsToDefault: () => void;
   
   // Expenses
   expenses: ExpenseItem[];
@@ -150,22 +152,22 @@ interface AppContextType {
 }
 
 const STORAGE_KEYS = {
-  COURSES: 'mcl_courses_v6',
-  TASK_TYPES: 'mcl_task_types_v6',
-  ASSIGNMENTS: 'mcl_assignments_v6',
-  AFFIRMATIONS: 'mcl_affirmations_v6',
-  EXPENSES: 'mcl_expenses_v6',
-  HABITS: 'mcl_habits_v6',
-  WELLNESS_LOGS: 'mcl_wellness_logs_v6',
-  LAPTRAK_TEMPLATES: 'mcl_laptrak_templates_v6',
+  COURSES: 'mcl_courses_v7',
+  TASK_TYPES: 'mcl_task_types_v7',
+  ASSIGNMENTS: 'mcl_assignments_v7',
+  AFFIRMATIONS: 'mcl_affirmations_v7',
+  EXPENSES: 'mcl_expenses_v7',
+  HABITS: 'mcl_habits_v7',
+  WELLNESS_LOGS: 'mcl_wellness_logs_v7',
+  LAPTRAK_TEMPLATES: 'mcl_laptrak_templates_v7',
   MAS_PHONE: 'mcl_mas_phone',
-  GOALS: 'mcl_goals_v6',
-  MOOD: 'mcl_mood_v6',
-  LETTERS: 'mcl_letters_v6',
-  LOVE_NOTES: 'mcl_lovenotes_v6',
-  WATER: 'mcl_water_v6',
-  QUOTE_IDX: 'mcl_quote_idx_v6',
-  AFFIRMATION_IDX: 'mcl_affirmation_idx_v6'
+  GOALS: 'mcl_goals_v7',
+  MOOD: 'mcl_mood_v7',
+  LETTERS: 'mcl_letters_v7',
+  LOVE_NOTES: 'mcl_lovenotes_v7',
+  WATER: 'mcl_water_v7',
+  QUOTE_IDX: 'mcl_quote_idx_v7',
+  AFFIRMATION_IDX: 'mcl_affirmation_idx_v7'
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -449,6 +451,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast(`Kategori tugas "${name}" berhasil dibuat!`);
   };
 
+  const resetTaskTypesToDefault = () => {
+    setTaskTypes(INITIAL_TASK_TYPES);
+    showToast('Kategori & label tugas berhasil dipulihkan!');
+  };
+
   const deleteTaskType = (id: string) => {
     if (taskTypes.length <= 1) {
       showToast('Minimal harus ada 1 kategori tugas.');
@@ -459,6 +466,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Assignment Handlers
+  const resetAssignmentsToDefault = () => {
+    setAssignments(INITIAL_ASSIGNMENTS);
+    showToast('Daftar tugas MOKA-KU UPI & FPMIPA berhasil dipulihkan!');
+  };
   const addAssignment = (data: {
     title: string;
     typeId: string;
@@ -827,11 +838,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         taskTypes,
         addTaskType,
         deleteTaskType,
+        resetTaskTypesToDefault,
         assignments,
         addAssignment,
         toggleAssignment,
         toggleSubtask,
         deleteAssignment,
+        resetAssignmentsToDefault,
         expenses,
         addExpense,
         deleteExpense,
