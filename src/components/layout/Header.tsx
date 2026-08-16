@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenBackup }) => {
   const currentInfo = TAB_TITLES[activeTab] || { title: 'Halo, Sayang', subtitle: 'Workspace Khusus Sayang' };
 
   return (
-    <header className="sticky top-0 z-30 bg-[#fffdfa]/95 backdrop-blur-md border-b border-rose-100 px-3.5 sm:px-4 lg:px-8 py-2.5 sm:py-3 transition-all">
+    <header className="fixed top-0 left-0 right-0 z-30 bg-[#fffdfa]/95 backdrop-blur-md border-b border-rose-200/80 shadow-xs px-3.5 sm:px-4 lg:px-8 py-2.5 sm:py-3 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Left: Burger Menu Toggle & Title */}
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
