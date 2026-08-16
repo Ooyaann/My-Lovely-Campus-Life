@@ -150,22 +150,22 @@ interface AppContextType {
 }
 
 const STORAGE_KEYS = {
-  COURSES: 'mcl_courses_v5',
-  TASK_TYPES: 'mcl_task_types_v5',
-  ASSIGNMENTS: 'mcl_assignments_v5',
-  AFFIRMATIONS: 'mcl_affirmations_v5',
-  EXPENSES: 'mcl_expenses_v5',
-  HABITS: 'mcl_habits_v5',
-  WELLNESS_LOGS: 'mcl_wellness_logs_v5',
-  LAPTRAK_TEMPLATES: 'mcl_laptrak_templates_v5',
+  COURSES: 'mcl_courses_v6',
+  TASK_TYPES: 'mcl_task_types_v6',
+  ASSIGNMENTS: 'mcl_assignments_v6',
+  AFFIRMATIONS: 'mcl_affirmations_v6',
+  EXPENSES: 'mcl_expenses_v6',
+  HABITS: 'mcl_habits_v6',
+  WELLNESS_LOGS: 'mcl_wellness_logs_v6',
+  LAPTRAK_TEMPLATES: 'mcl_laptrak_templates_v6',
   MAS_PHONE: 'mcl_mas_phone',
-  GOALS: 'mcl_goals_v5',
-  MOOD: 'mcl_mood_v5',
-  LETTERS: 'mcl_letters_v5',
-  LOVE_NOTES: 'mcl_lovenotes_v5',
-  WATER: 'mcl_water_v5',
-  QUOTE_IDX: 'mcl_quote_idx_v5',
-  AFFIRMATION_IDX: 'mcl_affirmation_idx_v5'
+  GOALS: 'mcl_goals_v6',
+  MOOD: 'mcl_mood_v6',
+  LETTERS: 'mcl_letters_v6',
+  LOVE_NOTES: 'mcl_lovenotes_v6',
+  WATER: 'mcl_water_v6',
+  QUOTE_IDX: 'mcl_quote_idx_v6',
+  AFFIRMATION_IDX: 'mcl_affirmation_idx_v6'
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);

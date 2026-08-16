@@ -107,6 +107,22 @@ export const OFFICIAL_UPI_KRS: CourseSchedule[] = [
 
 export const INITIAL_TASK_TYPES: TaskTypeConfig[] = [
   {
+    id: "type-mokaku-upi",
+    name: "MOKA-KU UPI (Univ)",
+    color: "#be123c",
+    bgLight: "#ffe4e6",
+    description: "Penugasan & hafalan MOKA-KU tingkat Universitas UPI 2026",
+    iconName: "GraduationCap"
+  },
+  {
+    id: "type-mokaku-fpmipa",
+    name: "MOKA-KU FPMIPA",
+    color: "#0369a1",
+    bgLight: "#e0f2fe",
+    description: "Penugasan MOKA-KU tingkat Fakultas FPMIPA UPI 2026",
+    iconName: "FlaskConical"
+  },
+  {
     id: "type-laptrak",
     name: "Laptrak & Jurnal Lab",
     color: "#9f1239",
@@ -117,8 +133,8 @@ export const INITIAL_TASK_TYPES: TaskTypeConfig[] = [
   {
     id: "type-kuliah",
     name: "Tugas Kuliah & Makalah",
-    color: "#0369a1",
-    bgLight: "#e0f2fe",
+    color: "#4338ca",
+    bgLight: "#e0e7ff",
     description: "Makalah, tugas harian, resume jurnal, dan slide presentasi",
     iconName: "BookOpen"
   },
@@ -141,15 +157,15 @@ export const INITIAL_TASK_TYPES: TaskTypeConfig[] = [
   {
     id: "type-kencan",
     name: "Kencan & Janji Berdua",
-    color: "#be123c",
-    bgLight: "#ffe4e6",
+    color: "#db2777",
+    bgLight: "#fce7f3",
     description: "Rencana jalan-jalan, makan mie ayam bareng Mas, dan nonton film",
     iconName: "Heart"
   },
   {
     id: "type-belanja",
     name: "Kebutuhan Lab & Belanja",
-    color: "#4338ca",
+    color: "#4f46e5",
     bgLight: "#e0e7ff",
     description: "Fotokopi modul, milimeter blok, kacamata goggle, dan logistik",
     iconName: "ShoppingBag"
@@ -530,7 +546,282 @@ export const INITIAL_ROMANTIC_AFFIRMATIONS: RomanticAffirmation[] = [
   }
 ];
 
-export const INITIAL_ASSIGNMENTS: AssignmentTask[] = [];
+export const INITIAL_ASSIGNMENTS: AssignmentTask[] = [
+  // ==========================================
+  // BAGIAN 1: MOKA-KU UPI 2026 (UNIVERSITAS)
+  // ==========================================
+  {
+    id: "moka-upi-1",
+    title: "Hafalan Lagu Wajib & Tari Gelar Saloka MOKA-KU UPI",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "17 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Wajib dihafal untuk apel & pembukaan MOKA-KU UPI. Pelajari gerakan Spirit MOKA-KU & Tari Gelar Saloka via IG/YouTube @mokakuupi.",
+    subtasks: [
+      { id: "sub-mu1-1", title: "Hafalkan Himne UPI & Mars UPI (Cipt. Wahyu Wibisana & Dana Setia)", isDone: false },
+      { id: "sub-mu1-2", title: "Hafalkan Lagu Totalitas Perjuangan & Buruh Tani", isDone: false },
+      { id: "sub-mu1-3", title: "Hafalkan Lagu Spirit MOKA-KU UPI - Semangat Jiwa Muda", isDone: false },
+      { id: "sub-mu1-4", title: "Pelajari Gerakan Koreografi Spirit MOKA-KU UPI (YT/IG @mokakuupi)", isDone: false },
+      { id: "sub-mu1-5", title: "Pelajari Gerakan Tari Gelar Saloka (IG @mokakuupi)", isDone: false },
+      { id: "sub-mu1-6", title: "Hafalkan 3 Lagu Daerah Gelar Saloka: Manuk Dadali, Tokecang, Sabilulungan", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-2",
+    title: "Cetak Booklet A5 & Isi Biodata / Analisis SWOT",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "17 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Wajib mencetak Buku Panduan/Booklet ukuran A5 dan dibawa setiap hari kegiatan. Lengkapi biodata, analisis SWOT, target 5 tahun, dan esai solusi pendidikan.",
+    subtasks: [
+      { id: "sub-mu2-1", title: "Cetak Buku Panduan / Booklet MOKA-KU UPI 2026 ukuran A5", isDone: false },
+      { id: "sub-mu2-2", title: "Isi Biodata Lengkap Peserta di halaman booklet", isDone: false },
+      { id: "sub-mu2-3", title: "Tuliskan Analisis SWOT & Target Capaian 5 Tahun di booklet", isDone: false },
+      { id: "sub-mu2-4", title: "Tuliskan Deskripsi & Solusi Permasalahan Pendidikan Indonesia (min. 200 kata)", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-3",
+    title: "Follow Seluruh Akun Media Sosial Resmi UPI & MOKA-KU",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "17 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Sedang",
+    isDone: false,
+    notes: "Ikuti seluruh medsos resmi untuk update berkala jadwal, arahan penugasan, dan pengumuman kepemanduan.",
+    subtasks: [
+      { id: "sub-mu3-1", title: "Follow UPI Official: IG @upiofficial, TikTok @upi.official, X @upi_official, FB upiofficial", isDone: false },
+      { id: "sub-mu3-2", title: "Follow MOKA-KU UPI: IG @mokakuupi, TikTok @mokakuupi, X @mokakuupi, YT @MOKAKU-UPI", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-4",
+    title: "Video Perkenalan 'Dampak Nyata untuk Masa Depan'",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "16 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Format portrait (9:16), durasi 60-90 detik. Baju putih formal + nametag + bandana. Frame: https://bit.ly/PerkenalanMOKAKU2026. Tag @upi.official & @mokakuupi.",
+    subtasks: [
+      { id: "sub-mu4-1", title: "Siapkan pembukaan salam & nama dalam BISINDO (Bahasa Isyarat Indonesia)", isDone: false },
+      { id: "sub-mu4-2", title: "Sampaikan prodi Pendidikan Kimia, FPMIPA, alasan memilih UPI & perjuangan masuk", isDone: false },
+      { id: "sub-mu4-3", title: "Sampaikan dampak/kontribusi nyata 5 tahun & harapan terbesar selama MOKA-KU", isDone: false },
+      { id: "sub-mu4-4", title: "Ucapkan penutup: 'Bertumbuh, Bermakna, untuk Dampak Bersama!'", isDone: false },
+      { id: "sub-mu4-5", title: "Pasang bingkai resmi (https://bit.ly/PerkenalanMOKAKU2026) & upload ke TikTok & IG Feed publik", isDone: false },
+      { id: "sub-mu4-6", title: "Sertakan tagar resmi, tag @upi.official & @mokakuupi, lalu submit link ke GForm pemandu", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-5",
+    title: "Twibbon Instagram Feed MOKA-KU UPI 2026",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "16 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Unduh twibbon di https://bit.ly/TwibbonMOKAKU2026. Gunakan foto sopan formal, gunakan caption resmi panitia, dan tag akun @upi.official & @mokakuupi.",
+    subtasks: [
+      { id: "sub-mu5-1", title: "Unduh template Twibbon (https://bit.ly/TwibbonMOKAKU2026) & pasang foto formal terbaik", isDone: false },
+      { id: "sub-mu5-2", title: "Salin draft caption resmi panitia & lengkapi data diri", isDone: false },
+      { id: "sub-mu5-3", title: "Upload ke Feed IG pribadi (akun publik) & tag @upi.official & @mokakuupi", isDone: false },
+      { id: "sub-mu5-4", title: "Submit link postingan ke Google Form pemandu kelompok", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-6",
+    title: "Pembuatan & Optimalisasi Profil LinkedIn Mahasiswa Baru",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "16 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Profil profesional: foto formal, headline mahasiswa Pendidikan Kimia UPI, about min 4 kalimat, min 3 skills, connect min 10 maba 2026.",
+    subtasks: [
+      { id: "sub-mu6-1", title: "Gunakan nama sesuai KTP/Ijazah & foto profil setengah badan formal rapi", isDone: false },
+      { id: "sub-mu6-2", title: "Atur Headline: Mahasiswa Pendidikan Kimia – Universitas Pendidikan Indonesia", isDone: false },
+      { id: "sub-mu6-3", title: "Tulis About (min. 4 kalimat: perkenalan, minat kimia, keahlian, visi kontribusi)", isDone: false },
+      { id: "sub-mu6-4", title: "Tambahkan Pendidikan (Universitas Pendidikan Indonesia, FPMIPA, Pendidikan Kimia, 2026)", isDone: false },
+      { id: "sub-mu6-5", title: "Tambahkan minimal 3 skills (2 soft skills + 1 hard skill kimia/edukasi)", isDone: false },
+      { id: "sub-mu6-6", title: "Hubungkan (connect) dengan minimal 10 sesama mahasiswa baru UPI 2026", isDone: false },
+      { id: "sub-mu6-7", title: "Ubah URL LinkedIn custom nama lengkap & submit link ke Google Form pemandu", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-7",
+    title: "Tugas Harian Day 1 (Selasa, 18 Ags): Refleksi LinkedIn, Resume Booklet & Story IG",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "18 Agustus 2026",
+    deadlineTime: "22:00 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Refleksi LinkedIn 150-300 kata + foto dokumentasi. Resume tulis tangan di booklet A5. Poster Story IG resume materi + foto pemandu.",
+    subtasks: [
+      { id: "sub-mu7-1", title: "Tulis & upload refleksi pematerian Day 1 di LinkedIn (150-300 kata + 1-3 foto dokumentasi) & submit GForm", isDone: false },
+      { id: "sub-mu7-2", title: "Tulis resume pematerian Day 1 langsung di Booklet MOKA-KU A5 & upload foto ke GForm", isDone: false },
+      { id: "sub-mu7-3", title: "Buat poster IG Story resume kepemanduan + 1 foto bersama pemandu (template panitia) & submit bukti ke GForm", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-8",
+    title: "Tugas Harian Day 3 (Kamis, 20 Ags): Refleksi LinkedIn, Resume Booklet & Story IG",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "20 Agustus 2026",
+    deadlineTime: "22:00 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Refleksi LinkedIn 150-300 kata + foto. Resume pematerian Day 3 di booklet A5. Poster Story IG resume Day 3.",
+    subtasks: [
+      { id: "sub-mu8-1", title: "Tulis & upload refleksi pematerian Day 3 di LinkedIn (150-300 kata + foto) & submit link via GForm", isDone: false },
+      { id: "sub-mu8-2", title: "Tulis resume pematerian Day 3 di Booklet MOKA-KU A5 & upload foto bukti ke GForm", isDone: false },
+      { id: "sub-mu8-3", title: "Buat poster IG Story resume kepemanduan Day 3 + foto bersama pemandu & submit screenshot ke GForm", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-upi-9",
+    title: "Tugas Harian Day 4 (Jumat, 21 Ags): Video Recount Diary, Story IG & Expo UKM",
+    typeId: "type-mokaku-upi",
+    categoryName: "MOKA-KU UPI (Univ)",
+    course: "MOKA-KU UPI 2026",
+    deadline: "21 Agustus 2026",
+    deadlineTime: "23:59 WIB",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Video recount diary Day 4 (IG Reels/TikTok via https://bit.ly/PenugasanDAY4MOKAKU2026). Poster Story IG kepemanduan. Kumpulkan max 12 stempel passport challenge di expo UKM.",
+    subtasks: [
+      { id: "sub-mu9-1", title: "Buat video recount keseruan Day 4 MOKA-KU's Diary & upload ke Reels / TikTok", isDone: false },
+      { id: "sub-mu9-2", title: "Buat poster IG Story resume kepemanduan Day 4 + foto pemandu & submit bukti GForm", isDone: false },
+      { id: "sub-mu9-3", title: "Kunjungi stand expo UKM & selesaikan challenge untuk kumpulkan max 12 stempel di booklet", isDone: false },
+      { id: "sub-mu9-4", title: "Upload foto lembar MOKA-KU Passport Challenge ke Google Form pemandu", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+
+  // ==========================================
+  // BAGIAN 2: MOKA-KU FPMIPA 2026 (FAKULTAS)
+  // ==========================================
+  {
+    id: "moka-fpmipa-1",
+    title: "Video Kelompok Menyanyikan Himne FPMIPA UPI (16:9 Landscape)",
+    typeId: "type-mokaku-fpmipa",
+    categoryName: "MOKA-KU FPMIPA",
+    course: "MOKA-KU FPMIPA 2026",
+    deadline: "18 Agustus 2026",
+    deadlineTime: "23:59 WIB (H-1)",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Kemeja kotak-kotak (hijab hitam). 3 logo pojok kanan atas (UPI, FPMIPA, MOKA-KU FPMIPA: https://bit.ly/LogoKegiatanMOKA-KUFPMIPA2026). Ketua upload YouTube & submit: https://bit.ly/TugasVideoKelompokMOKA-KUFPMIPA26.",
+    subtasks: [
+      { id: "sub-mf1-1", title: "Hafalkan lagu Himne FPMIPA UPI bersama anggota kelompok", isDone: false },
+      { id: "sub-mf1-2", title: "Rekam video bernyanyi bersama berpakaian kemeja kotak-kotak (16:9 Landscape)", isDone: false },
+      { id: "sub-mf1-3", title: "Pasang 3 logo resmi (UPI, FPMIPA, MOKA-KU FPMIPA) di pojok kanan atas video", isDone: false },
+      { id: "sub-mf1-4", title: "Ketua kelompok upload video ke YouTube & submit link ke https://bit.ly/TugasVideoKelompokMOKA-KUFPMIPA26", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-fpmipa-2",
+    title: "Video Pengenalan Prodi Pendidikan Kimia (Reels 9:16, Max 60 Detik)",
+    typeId: "type-mokaku-fpmipa",
+    categoryName: "MOKA-KU FPMIPA",
+    course: "MOKA-KU FPMIPA 2026",
+    deadline: "18 Agustus 2026",
+    deadlineTime: "23:59 WIB (H-1)",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Reels portrait 9:16 max 60 detik pengenalan prodi Pendidikan Kimia. Baju bebas sopan. 3 logo kanan atas. Tag @fpmipaupiofficial, @mokakufpmipa, @bemfpmipa, @upi.official. Submit: https://bit.ly/TugasVideoMOKA-KUFPMIPA26.",
+    subtasks: [
+      { id: "sub-mf2-1", title: "Siapkan script & konsep pengenalan prodi Pendidikan Kimia (maksimal 60 detik)", isDone: false },
+      { id: "sub-mf2-2", title: "Rekam video format 9:16 portrait dengan pakaian bebas sopan dan rapi", isDone: false },
+      { id: "sub-mf2-3", title: "Pasang 3 logo resmi (UPI, FPMIPA, MOKA-KU FPMIPA) di pojok kanan atas layar", isDone: false },
+      { id: "sub-mf2-4", title: "Upload ke Instagram Reels & tag akun: @fpmipaupiofficial, @mokakufpmipa, @bemfpmipa, @upi.official", isDone: false },
+      { id: "sub-mf2-5", title: "Submit link Reels ke Google Form: https://bit.ly/TugasVideoMOKA-KUFPMIPA26", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-fpmipa-3",
+    title: "Twibbon FPMIPA 2026 (Feed Instagram)",
+    typeId: "type-mokaku-fpmipa",
+    categoryName: "MOKA-KU FPMIPA",
+    course: "MOKA-KU FPMIPA 2026",
+    deadline: "18 Agustus 2026",
+    deadlineTime: "23:59 WIB (H-1)",
+    priority: "Tinggi",
+    isDone: false,
+    notes: "Template: https://bit.ly/TWIBBONMOKA-KUFPMIPA2026. Caption: https://bit.ly/CaptionTWIBBONMOKA-KUFPMIPA2026. Tagar #MOKAKUFPMIPA26. Tag @fpmipaupiofficial, @mokakufpmipa, @bemfpmipa, @upi.official.",
+    subtasks: [
+      { id: "sub-mf3-1", title: "Unduh twibbon (https://bit.ly/TWIBBONMOKA-KUFPMIPA2026) & pasang foto formal terbaik", isDone: false },
+      { id: "sub-mf3-2", title: "Salin draft caption resmi (https://bit.ly/CaptionTWIBBONMOKA-KUFPMIPA2026) & sertakan tagar #MOKAKUFPMIPA26", isDone: false },
+      { id: "sub-mf3-3", title: "Upload ke Feed IG pribadi & tag @fpmipaupiofficial, @mokakufpmipa, @bemfpmipa, @upi.official", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-fpmipa-4",
+    title: "Poster After Report & Harapan Mahasiswa Baru FPMIPA",
+    typeId: "type-mokaku-fpmipa",
+    categoryName: "MOKA-KU FPMIPA",
+    course: "MOKA-KU FPMIPA 2026",
+    deadline: "20 Agustus 2026",
+    deadlineTime: "23:59 WIB (H+1)",
+    priority: "Sedang",
+    isDone: false,
+    notes: "Poster digital after report kegiatan MOKA-KU FPMIPA & harapan maba. Upload di IG Story tag @mokakufpmipa & @bemfpmipa. Submit: https://bit.ly/TugasPosterMOKA-KUFPIMIPA26.",
+    subtasks: [
+      { id: "sub-mf4-1", title: "Desain poster digital after report kegiatan MOKA-KU FPMIPA & harapan maba", isDone: false },
+      { id: "sub-mf4-2", title: "Unggah ke Instagram Story pribadi dengan tag @mokakufpmipa & @bemfpmipa", isDone: false },
+      { id: "sub-mf4-3", title: "Kumpulkan screenshot bukti unggahan ke GForm: https://bit.ly/TugasPosterMOKA-KUFPIMIPA26", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  },
+  {
+    id: "moka-fpmipa-5",
+    title: "Add Yours Moment MOKA-KU FPMIPA 2026 (IG Story)",
+    typeId: "type-mokaku-fpmipa",
+    categoryName: "MOKA-KU FPMIPA",
+    course: "MOKA-KU FPMIPA 2026",
+    deadline: "21 Agustus 2026",
+    deadlineTime: "23:59 WIB (H+2)",
+    priority: "Sedang",
+    isDone: false,
+    notes: "Unggah foto dokumentasi tangkapan pribadi selama kegiatan FPMIPA via stiker Add Yours IG Story MOKA-KU FPMIPA. Submit bukti: https://bit.ly/TugasAddYoursMOKA-KUFPIMIPA26.",
+    subtasks: [
+      { id: "sub-mf5-1", title: "Pilih foto dokumentasi momen terbaik tangkapan pribadi saat kegiatan MOKA-KU FPMIPA", isDone: false },
+      { id: "sub-mf5-2", title: "Unggah melalui stiker Add Yours di Instagram Story MOKA-KU FPMIPA", isDone: false },
+      { id: "sub-mf5-3", title: "Kumpulkan screenshot bukti ke GForm: https://bit.ly/TugasAddYoursMOKA-KUFPIMIPA26", isDone: false }
+    ],
+    createdAt: "2026-08-16"
+  }
+];
 
 export const INITIAL_EXPENSES: ExpenseItem[] = [];
 
