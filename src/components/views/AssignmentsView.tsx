@@ -16,7 +16,11 @@ import {
   X,
   BookOpen,
   RotateCcw,
-  AlertTriangle
+  AlertTriangle,
+  Calendar,
+  ArrowUpDown,
+  CalendarClock,
+  AlertCircle
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { TaskPriority, AssignmentTask, TaskTypeConfig } from '../../types';
@@ -39,6 +43,8 @@ export const AssignmentsView: React.FC = () => {
 
   const [selectedTypeId, setSelectedTypeId] = useState<string>('Semua');
   const [filterStatus, setFilterStatus] = useState<'Semua' | 'Belum' | 'Selesai'>('Semua');
+  const [sortOption, setSortOption] = useState<'terdekat' | 'terjauh' | 'prioritas' | 'terbaru'>('terdekat');
+  const [dateFilter, setDateFilter] = useState<'semua' | 'hari-ini' | 'pra-acara' | 'pelaksanaan' | 'pasca-acara'>('semua');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showTypeManagerModal, setShowTypeManagerModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<AssignmentTask | null>(null);
@@ -128,16 +134,109 @@ export const AssignmentsView: React.FC = () => {
     setShowTypeManagerModal(false);
   };
 
-  const filteredTasks = assignments.filter((task) => {
-    // Filter by type
-    if (selectedTypeId !== 'Semua' && task.typeId !== selectedTypeId) {
-      return false;
+  const parseDeadlineToTimestamp = (deadlineStr: string): number => {
+    if (!deadlineStr) return Infinity;
+    const str = deadlineStr.toLowerCase().trim();
+
+    const monthMap: Record<string, number> = {
+      'januari': 0, 'jan': 0,
+      'februari': 1, 'feb': 1,
+      'maret': 2, 'mar': 2,
+      'april': 3, 'apr': 3,
+      'mei': 4,
+      'juni': 5, 'jun': 5,
+      'juli': 6, 'jul': 6,
+      'agustus': 7, 'ags': 7, 'agu': 7,
+      'september': 8, 'sep': 8,
+      'oktober': 9, 'okt': 9,
+      'november': 10, 'nov': 10,
+      'desember': 11, 'des': 11
+    };
+
+    const match = str.match(/(\d{1,2})\s+([a-z]+)(?:\s+(\d{4}))?/);
+    if (match) {
+      const day = parseInt(match[1], 10);
+      const monthName = match[2];
+      const year = match[3] ? parseInt(match[3], 10) : 2026;
+      
+      if (monthMap[monthName] !== undefined) {
+        const month = monthMap[monthName];
+        const timeMatch = str.match(/(\d{1,2})[:.](\d{2})/);
+        const hours = timeMatch ? parseInt(timeMatch[1], 10) : 23;
+        const minutes = timeMatch ? parseInt(timeMatch[2], 10) : 59;
+        return new Date(year, month, day, hours, minutes).getTime();
+      }
     }
-    // Filter by status
-    if (filterStatus === 'Belum' && task.isDone) return false;
-    if (filterStatus === 'Selesai' && !task.isDone) return false;
-    return true;
-  });
+
+    const isoTime = Date.parse(deadlineStr);
+    if (!isNaN(isoTime)) return isoTime;
+
+    if (str.includes('hari ini')) return new Date(2026, 7, 16, 23, 59).getTime();
+    if (str.includes('besok')) return new Date(2026, 7, 17, 23, 59).getTime();
+    if (str.includes('lusa')) return new Date(2026, 7, 18, 23, 59).getTime();
+
+    return Infinity;
+  };
+
+  const filteredTasks = assignments
+    .filter((task) => {
+      // 1. Filter by category / type
+      if (selectedTypeId !== 'Semua' && task.typeId !== selectedTypeId) {
+        return false;
+      }
+      // 2. Filter by status
+      if (filterStatus === 'Belum' && task.isDone) return false;
+      if (filterStatus === 'Selesai' && !task.isDone) return false;
+
+      // 3. Filter by date category
+      if (dateFilter !== 'semua') {
+        const ts = parseDeadlineToTimestamp(task.deadline);
+        const day16 = new Date(2026, 7, 16, 23, 59, 59).getTime();
+        const day18 = new Date(2026, 7, 18, 23, 59, 59).getTime();
+        const day20 = new Date(2026, 7, 20, 0, 0, 0).getTime();
+
+        if (dateFilter === 'hari-ini') {
+          const isDay16 = task.deadline.toLowerCase().includes('16 agustus') || ts <= day16;
+          if (!isDay16) return false;
+        } else if (dateFilter === 'pra-acara') {
+          const isPra = ts <= day18 || task.deadline.toLowerCase().includes('16 agustus') || task.deadline.toLowerCase().includes('17 agustus') || task.deadline.toLowerCase().includes('18 agustus') || task.deadline.toLowerCase().includes('h-1');
+          if (!isPra) return false;
+        } else if (dateFilter === 'pelaksanaan') {
+          const isPelaksanaan = task.deadline.toLowerCase().includes('18 agustus') || task.deadline.toLowerCase().includes('19 agustus') || task.deadline.toLowerCase().includes('20 agustus') || task.deadline.toLowerCase().includes('21 agustus') || task.deadline.toLowerCase().includes('day 1') || task.deadline.toLowerCase().includes('day 3') || task.deadline.toLowerCase().includes('day 4');
+          if (!isPelaksanaan) return false;
+        } else if (dateFilter === 'pasca-acara') {
+          const isPasca = ts >= day20 || task.deadline.toLowerCase().includes('20 agustus') || task.deadline.toLowerCase().includes('21 agustus') || task.deadline.toLowerCase().includes('22 agustus') || task.deadline.toLowerCase().includes('h+1') || task.deadline.toLowerCase().includes('h+2') || task.deadline.toLowerCase().includes('h+3');
+          if (!isPasca) return false;
+        }
+      }
+
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortOption === 'terdekat') {
+        const timeA = parseDeadlineToTimestamp(a.deadline);
+        const timeB = parseDeadlineToTimestamp(b.deadline);
+        if (timeA !== timeB) return timeA - timeB;
+        return 0;
+      }
+      if (sortOption === 'terjauh') {
+        const timeA = parseDeadlineToTimestamp(a.deadline);
+        const timeB = parseDeadlineToTimestamp(b.deadline);
+        if (timeA !== timeB) return timeB - timeA;
+        return 0;
+      }
+      if (sortOption === 'prioritas') {
+        const priorityWeight = { 'Tinggi': 3, 'Sedang': 2, 'Santai': 1 };
+        const weightA = priorityWeight[a.priority] || 0;
+        const weightB = priorityWeight[b.priority] || 0;
+        if (weightA !== weightB) return weightB - weightA;
+        return parseDeadlineToTimestamp(a.deadline) - parseDeadlineToTimestamp(b.deadline);
+      }
+      if (sortOption === 'terbaru') {
+        return b.id.localeCompare(a.id);
+      }
+      return 0;
+    });
 
   const getPriorityBadgeClass = (p: TaskPriority) => {
     switch (p) {
@@ -217,58 +316,109 @@ export const AssignmentsView: React.FC = () => {
           </div>
         </div>
 
-        {/* Filter Controls (Clean Custom Dropdowns with floating popover menus) */}
-        <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-              <Filter className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />
-              <span>Filter Berdasarkan Tipe Tugas:</span>
-            </label>
-            <CustomSelect
-              value={selectedTypeId}
-              onChange={setSelectedTypeId}
-              options={[
-                { value: 'Semua', label: 'Semua Tipe Tugas', count: assignments.length },
-                ...taskTypes.map((type) => ({
-                  value: type.id,
-                  label: type.name,
-                  color: type.color,
-                  count: `${assignments.filter((a) => a.typeId === type.id).length} Tugas`
-                }))
-              ]}
-              ariaLabel="Pilih Tipe Tugas"
-            />
+        {/* Filter Controls (Clean Custom Dropdowns + Quick Date Pills) */}
+        <div className="pt-4 border-t border-slate-100 space-y-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {/* 1. Category / Type Filter */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                <Filter className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />
+                <span>Kategori Tugas:</span>
+              </label>
+              <CustomSelect
+                value={selectedTypeId}
+                onChange={setSelectedTypeId}
+                options={[
+                  { value: 'Semua', label: 'Semua Kategori', count: assignments.length },
+                  ...taskTypes.map((type) => ({
+                    value: type.id,
+                    label: type.name,
+                    color: type.color,
+                    count: `${assignments.filter((a) => a.typeId === type.id).length}`
+                  }))
+                ]}
+                ariaLabel="Pilih Tipe Tugas"
+              />
+            </div>
+
+            {/* 2. Status Filter */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />
+                <span>Status Pengerjaan:</span>
+              </label>
+              <CustomSelect
+                value={filterStatus}
+                onChange={(val) => setFilterStatus(val as 'Semua' | 'Belum' | 'Selesai')}
+                options={[
+                  { value: 'Semua', label: 'Semua Status', count: assignments.length },
+                  { 
+                    value: 'Belum', 
+                    label: 'Belum Selesai', 
+                    count: assignments.filter((a) => !a.isDone).length,
+                    color: '#e11d48'
+                  },
+                  { 
+                    value: 'Selesai', 
+                    label: 'Sudah Selesai', 
+                    count: assignments.filter((a) => a.isDone).length,
+                    color: '#059669'
+                  }
+                ]}
+                ariaLabel="Pilih Status Tugas"
+              />
+            </div>
+
+            {/* 3. Sort Order (Nearest deadline, Farthest, Priority, Newest) */}
+            <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
+              <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                <ArrowUpDown className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />
+                <span>Urutan Tanggal & Deadline:</span>
+              </label>
+              <CustomSelect
+                value={sortOption}
+                onChange={(val) => setSortOption(val as any)}
+                options={[
+                  { value: 'terdekat', label: '📅 Deadline Terdekat (Segera)', color: '#be123c' },
+                  { value: 'terjauh', label: '🗓️ Deadline Terjauh', color: '#0284c7' },
+                  { value: 'prioritas', label: '⚡ Prioritas Tertinggi', color: '#d97706' },
+                  { value: 'terbaru', label: '✨ Baru Ditambahkan', color: '#7c3aed' }
+                ]}
+                ariaLabel="Urutkan Tanggal"
+              />
+            </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-rose-900 flex-shrink-0" />
-              <span>Status Pengerjaan:</span>
-            </label>
-            <CustomSelect
-              value={filterStatus}
-              onChange={(val) => setFilterStatus(val as 'Semua' | 'Belum' | 'Selesai')}
-              options={[
-                { 
-                  value: 'Semua', 
-                  label: 'Semua Status', 
-                  count: assignments.length 
-                },
-                { 
-                  value: 'Belum', 
-                  label: 'Belum Selesai', 
-                  count: assignments.filter((a) => !a.isDone).length,
-                  color: '#e11d48'
-                },
-                { 
-                  value: 'Selesai', 
-                  label: 'Sudah Selesai', 
-                  count: assignments.filter((a) => a.isDone).length,
-                  color: '#059669'
-                }
-              ]}
-              ariaLabel="Pilih Status Tugas"
-            />
+          {/* Quick Date Range Pill Filter */}
+          <div className="pt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1 mr-1">
+              <Calendar className="w-3.5 h-3.5 text-rose-800" />
+              <span>Jadwal:</span>
+            </span>
+
+            {[
+              { id: 'semua', label: 'Semua Tanggal' },
+              { id: 'hari-ini', label: '🔴 Deadline Hari Ini (16 Ags)' },
+              { id: 'pra-acara', label: '🟡 Pra-Acara (16-18 Ags)' },
+              { id: 'pelaksanaan', label: '🔵 Pelaksanaan (18-21 Ags)' },
+              { id: 'pasca-acara', label: '🟢 Pasca & Pengganti' }
+            ].map((tab) => {
+              const active = dateFilter === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setDateFilter(tab.id as any)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                    active
+                      ? 'bg-rose-900 text-white shadow-xs scale-102'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -294,6 +444,8 @@ export const AssignmentsView: React.FC = () => {
           filteredTasks.map((task) => {
             const matchedType = taskTypes.find((t) => t.id === task.typeId);
             const typeColor = matchedType?.color || '#831843';
+            const isTodayDeadline = task.deadline.toLowerCase().includes('16 agustus') || task.deadline.toLowerCase().includes('hari ini');
+            const isTomorrowDeadline = task.deadline.toLowerCase().includes('17 agustus') || task.deadline.toLowerCase().includes('18 agustus') || task.deadline.toLowerCase().includes('besok');
 
             return (
               <div
@@ -301,6 +453,8 @@ export const AssignmentsView: React.FC = () => {
                 className={`p-4 sm:p-5 rounded-3xl border transition-all space-y-3 group ${
                   task.isDone
                     ? 'bg-slate-50/70 border-slate-200 opacity-75'
+                    : isTodayDeadline
+                    ? 'bg-gradient-to-br from-rose-50/70 via-white to-rose-50/40 border-rose-300 shadow-xs'
                     : 'bg-white border-rose-100/90 hover:border-rose-300 hover:shadow-xs'
                 }`}
               >
@@ -338,6 +492,21 @@ export const AssignmentsView: React.FC = () => {
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getPriorityBadgeClass(task.priority)}`}>
                         {task.priority}
                       </span>
+
+                      {/* Deadline Urgency Badge */}
+                      {!task.isDone && isTodayDeadline && (
+                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-600 text-white animate-pulse flex items-center gap-1 shadow-2xs">
+                          <AlertCircle className="w-2.5 h-2.5" />
+                          <span>Deadline Hari Ini!</span>
+                        </span>
+                      )}
+
+                      {!task.isDone && !isTodayDeadline && isTomorrowDeadline && (
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
+                          <Clock className="w-2.5 h-2.5 text-amber-700" />
+                          <span>Segera</span>
+                        </span>
+                      )}
                     </div>
 
                     <h3 className={`text-sm sm:text-base font-semibold ${task.isDone ? 'line-through text-slate-400' : 'text-slate-900'}`}>
